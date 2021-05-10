@@ -13,6 +13,8 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "hardhat/console.sol";
+
 /**
  * @dev {ERC721} token, including:
  *
@@ -193,6 +195,8 @@ contract Petshop is Context, Ownable, ERC721URIStorage {
             _isApprovedOrOwner(_msgSender(), tokenId_),
             "ERC721: transfer caller is not owner nor approved"
         );
+
+        console.log("change token %s price to %s", tokenId_, price_);
 
         uint256 prevPrice_ = tokenPrices[tokenId_];
         tokenPrices[tokenId_] = price_;
