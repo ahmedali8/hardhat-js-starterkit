@@ -102,7 +102,7 @@ module.exports = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   abiExporter: {
-    path: "./abis",
+    path: "./abi-exporter",
     clear: true,
     flat: true,
     // only: [':ERC20$'],
