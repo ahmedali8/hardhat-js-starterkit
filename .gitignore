@@ -1,6 +1,26 @@
-**/node_modules
-**/.env
-**/notes.txt
+# folders
+.coverage_artifacts/
+.coverage_cache/
+.coverage_contracts/
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+artifacts/
+build/
+cache/
+coverage/
+dist/
+lib/
+node_modules/
+abi_exporter/
 
-/artifacts
-/cache
+# files
+*.env
+*.log
+*.tsbuildinfo
+coverage.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/notes.txt
+/stdout
