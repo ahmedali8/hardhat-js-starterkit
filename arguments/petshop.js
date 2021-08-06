@@ -1,7 +1,7 @@
 // Petshop contract
 module.exports = ["Petshop", "PET", "https://ipfs.io/ipfs/"];
 
-// npx hardhat verify --network <network> --constructor-args arguments/arguments.js CONTRACT_ADDRESS
+// npx hardhat verify --network <network> --constructor-args arguments/petshop.js CONTRACT_ADDRESS
 // OR
 // npx hardhat verify --network <network> CONTRACT_ADDRESS "ARG1" "ARG2" ...
 
