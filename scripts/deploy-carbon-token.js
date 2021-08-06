@@ -12,23 +12,8 @@ async function main() {
 
   const CarbonToken = await ethers.getContractFactory("CarbonToken");
   carbonToken = await CarbonToken.deploy();
-  createJson("carbonToken", carbonToken);
   // console.log(carbonToken);
   console.log(`CarbonToken address: ${carbonToken.address}`);
-
-  function createJson(name, contract) {
-    let addressObj = {};
-    addressObj[chainId] = contract.address;
-    console.log(addressObj);
-
-    fs.writeFileSync(
-      `abis/${name}.json`,
-      JSON.stringify({
-        address: addressObj,
-        abi: JSON.parse(contract.interface.format("json")),
-      })
-    );
-  }
 }
 
 main()

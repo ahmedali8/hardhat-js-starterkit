@@ -11,23 +11,8 @@ async function main() {
 
   const Petshop = await ethers.getContractFactory("Petshop");
   petshop = await Petshop.deploy("Petshop", "PET", "https://ipfs.io/ipfs/");
-  createJson("petshop", petshop);
   // console.log(carbonToken);
   console.log(`petshop address: ${petshop.address}`);
-
-  function createJson(name, contract) {
-    let addressObj = {};
-    addressObj[chainId] = contract.address;
-    console.log(addressObj);
-
-    fs.writeFileSync(
-      `abis/${name}.json`,
-      JSON.stringify({
-        address: addressObj,
-        abi: JSON.parse(contract.interface.format("json")),
-      })
-    );
-  }
 }
 
 main()

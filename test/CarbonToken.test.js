@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-const { toWei } = require("./utils.js");
+const { deployContract, toWei } = require("../utils/utils.js");
 
 describe("CarbonToken", () => {
   let carbonToken;
@@ -8,8 +8,7 @@ describe("CarbonToken", () => {
   beforeEach(async () => {
     [owner, user, ...accounts] = await ethers.getSigners();
 
-    const CarbonToken = await ethers.getContractFactory("CarbonToken");
-    carbonToken = await CarbonToken.deploy();
+    carbonToken = await deployContract(owner, "CarbonToken");
   });
 
   describe("CarbonToken Deployment", async () => {
