@@ -100,6 +100,8 @@ Deploy and automatically verify the contract using just the deploy script, this 
 run commands within the js file. Every time we need to verify a contract we need to set the arguments that we passed in the contract in the command
 or create an argument file and export it but now all this can be done automatically by using the `verifyContract` function in the `utils/utils.js`
 file. An example deploy scripts is attached for reference.
+As of now it works on Etherscan and BSCscan, you must provide it's api key in `.env` file. (Enable one at a time and comment other).
+You can get the api key by loging in to respector explorer.
 Specify the correct network in the script and run this command that same network. e.g. rinkeby
 Or run any script using
 
