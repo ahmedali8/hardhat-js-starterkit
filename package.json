@@ -1,8 +1,12 @@
 {
-  "name": "hardhat-starterkit",
+  "name": "@ahmedali8/hardhat-starterkit",
+  "description": "Starter kit for writing Solidity smart contracts in hardhat environment",
   "version": "0.1.0",
-  "description": "",
-  "main": "hardhat.config.js",
+  "author": {
+    "name": "Ahmed Ali Bhatti",
+    "url": "https://github.com/ahmedali8"
+  },
+  "license": "UNLICENSED",
   "scripts": {
     "clean": "hardhat clean",
     "compile": "hardhat clean && hardhat compile",
@@ -21,15 +25,12 @@
   ],
   "keywords": [
     "blockchain",
-    "ethersjs",
+    "ethereum",
     "hardhat",
-    "web3"
+    "smart-contracts",
+    "solidity"
   ],
-  "author": {
-    "name": "Ahmed Ali Bhatti",
-    "url": "https://github.com/ahmedali8"
-  },
-  "license": "UNLICENSED",
+  "private": true,
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.2",

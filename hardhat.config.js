@@ -49,6 +49,7 @@ module.exports = {
       {
         version: "0.8.4",
         settings: {
+          // Disable the optimizer when debugging
           // https://hardhat.org/hardhat-network/#solidity-optimizer-support
           optimizer: {
             enabled: true,
@@ -131,9 +132,12 @@ module.exports = {
   contractSizer,
   gasReporter: {
     enabled: true, // set false to disable
+    // enabled: process.env.REPORT_GAS ? true : false, // this is not working as of now
     currency: "USD",
     // if commented out then it fetches from ethGasStationAPI
     // gasPrice: process.env.GAS_PRICE,
     coinmarketcap: process.env.COIN_MARKET_CAP_API_KEY || null,
+    excludeContracts: [],
+    src: "./contracts",
   },
 };
