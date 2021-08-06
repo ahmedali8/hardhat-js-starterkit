@@ -1,19 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1/contracts/token/ERC721/ERC721.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1/contracts/utils/Context.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1/contracts/utils/Counters.sol";
-// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1/contracts/access/Ownable.sol";
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 /**
  * @dev {ERC721} token, including:
@@ -30,7 +22,7 @@ import "hardhat/console.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract Petshop is Context, Ownable, ERC721URIStorage {
+contract Petshop is Ownable, ERC721URIStorage {
     using Counters for Counters.Counter;
 
     // tokenId tracker using lib
@@ -196,7 +188,7 @@ contract Petshop is Context, Ownable, ERC721URIStorage {
             "ERC721: transfer caller is not owner nor approved"
         );
 
-        console.log("change token %s price to %s", tokenId_, price_);
+        // console.log("change token %s price to %s", tokenId_, price_);
 
         uint256 prevPrice_ = tokenPrices[tokenId_];
         tokenPrices[tokenId_] = price_;
