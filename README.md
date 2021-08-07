@@ -94,21 +94,50 @@ Deploy the contracts to a specific network, such as the Rinkeby testnet:
 $ yarn deploy:network rinkeby
 ```
 
-### Auto Deploy and Verify using a single command
+### Manual Verify
 
-Deploy and automatically verify the contract using just the deploy script, this is possible by using `child_process` within the script which lets
-run commands within the js file. Every time we need to verify a contract we need to set the arguments that we passed in the contract in the command
-or create an argument file and export it but now all this can be done automatically by using the `verifyContract` function in the `utils/utils.js`
-file. An example deploy scripts is attached for reference.
-As of now it works on Etherscan and BSCscan, you must provide it's api key in `.env` file. (Enable one at a time and comment other).
-You can get the api key by loging in to respector explorer.
-Specify the correct network in the script and run this command that same network. e.g. rinkeby
+This helps you verify the source code for your Solidity contracts on [etherscan](https://etherscan.io/) or [bscscan](https://bscscan.com/)
+
+```sh
+$ npx hardhat verify --network <network> DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1" "Constructor argument 2"
+```
+
+For complex arguments you can refer [here](https://hardhat.org/plugins/nomiclabs-hardhat-etherscan.html)
+
+```sh
+$ npx hardhat verify --contract contracts/CONTRACT_NAME.sol:CONTRACT_NAME --network <network> --constructor-args arguments/FILENAME.js DEPLOYED_CONTRACT_ADDRESS
+```
+
+### Auto Deploy and Verify (using a single command)
+
+Deploy and automatically verify the contract using deploy script, this is possible by using `child_process` within the script which lets you
+run commands within the .js file. Every time we need to verify a contract we need to set the arguments that we passed in the constructor of contract 
+in the command or create an argument file and export it but now all this can be done automatically by using the `verifyContract` function in 
+the `utils/utils.js` file. An example deploy script is attached for reference.
+As of now it works on Etherscan and Bscscan, you must provide it's api key in `.env` file. (Enable one at a time and comment other).
+You can get the api key by loging in to respective explorer.
+Specify the correct network in the script and run this command with same network specified in the `hardhat.config.js`. e.g. rinkeby 
 Or run any script using
 
 ```sh
 $ yarn deploy:network rinkeby
 $ npx hardhat run scripts/path_to_script --network rinkeby
 ```
+
+### Tasks
+
+#### flatfile
+
+We often need to flatten our code for verification purposes or any other but the existing default `flatten` task requires manual copy-paste from terminal
+and creation of whatever file extension we want but we can automate the creation of the flatten file by using a new `flatfile` task and providing the
+contract name with `--contract` flag
+
+```sh
+$ npx hardhat flatfile --contract CONTRACT_NAME
+$ yarn flatfile:contract CONTRACT_NAME
+```
+
+where, `CONTRACT_NAME` can be for example `TestingContract`
 
 ## Syntax Highlighting
 
