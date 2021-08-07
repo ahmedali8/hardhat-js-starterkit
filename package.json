@@ -32,6 +32,7 @@
   ],
   "private": true,
   "devDependencies": {
+    "@eth-optimism/plugins": "^1.0.0-alpha.3",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.2",
     "@nomiclabs/hardhat-truffle5": "^2.0.0",
