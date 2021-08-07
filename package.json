@@ -13,6 +13,7 @@
     "coverage": "hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"./test/**/*.js\"",
     "deploy": "hardhat run scripts/deploy.js",
     "deploy:network": "hardhat run scripts/deploy.js --network",
+    "flat:contract": "hardhat flatfile --contract",
     "lint": "yarn run lint:sol && yarn run lint:ts && yarn run prettier:list-different",
     "lint:sol": "solhint --config ./.solhint.json --max-warnings 0 \"contracts/**/*.sol\"",
     "prettier": "prettier --config .prettierrc --write \"**/*.{js,json,md,sol,ts}\"",
