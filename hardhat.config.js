@@ -26,28 +26,40 @@ require("./tasks/flatfile");
 const infuraUrl = (network) =>
   `https://${network}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
 
+const alchemyUrl = (network) =>
+  `https://${network}.g.alchemy.com/v2/${process.env.ALCHEMY_PROJECT_ID}-_s`;
+
 const networks = {
-  arbitrummainnet: { chainId: 42161, url: infuraUrl("arbitrum-mainnet") },
-  arbitrumrinkeby: { chainId: 421611, url: infuraUrl("arbitrum-rinkeby") },
-  bscmainnet: { chainId: 56, url: process.env.BSC_MAINNET_RPC_URL },
-  bsctestnet: { chainId: 97, url: process.env.BSC_MAINNET_RPC_URL },
+  arb: {
+    chainId: 42161,
+    url: alchemyUrl("arb-mainnet"),
+  },
+  arbrinkeby: {
+    chainId: 421611,
+    url: alchemyUrl("arb-rinkeby"),
+  },
+  bnb: { chainId: 56, url: process.env.BSC_MAINNET_RPC_URL },
+  bnbt: { chainId: 97, url: process.env.BSC_TESTNET_RPC_URL },
   ganache: { chainId: 1337, url: "http://127.0.0.1:7545" },
   goerli: { chainId: 5, url: infuraUrl("goerli") },
   hardhat: { chainId: 31337 },
   kovan: { chainId: 42, url: infuraUrl("kovan") },
   mainnet: { chainId: 1, url: infuraUrl("mainnet") },
-  maticmainnet: { chainId: 137, url: infuraUrl("polygon-mainnet") },
-  maticmumbai: {
-    chainId: 80001,
-    url: infuraUrl("polygon-mumbai"),
+  matic: {
+    chainId: 137,
+    url: alchemyUrl("polygon-mainnet"),
   },
-  optimismmainnet: {
-    chainId: 1,
-    url: infuraUrl("optimism-mainnet"),
+  maticmum: {
+    chainId: 80001,
+    url: alchemyUrl("polygon-mumbai"),
+  },
+  optimism: {
+    chainId: 10,
+    url: "https://mainnet.optimism.io/",
   },
   optimismkovan: {
-    chainId: 1,
-    url: infuraUrl("optimism-kovan"),
+    chainId: 69,
+    url: "https://kovan.optimism.io",
   },
   rinkeby: { chainId: 4, url: infuraUrl("rinkeby") },
   ropsten: { chainId: 3, url: infuraUrl("ropsten") },
@@ -120,19 +132,19 @@ module.exports = {
     goerli: getChainConfig("goerli"),
 
     /* BINANCE SMART CHAIN */
-    bscmainnet: getChainConfig("bscmainnet"),
-    bsctestnet: getChainConfig("bsctestnet"),
+    bnb: getChainConfig("bnb"),
+    bnbt: getChainConfig("bnbt"),
 
     /* MATIC L2 */
-    maticmainnet: getChainConfig("maticmainnet"),
-    maticmumbai: getChainConfig("maticmumbai"),
+    matic: getChainConfig("matic"),
+    maticmum: getChainConfig("maticmum"),
 
     /* ARBITRUM L2 */
-    arbitrummainnet: getChainConfig("arbitrummainnet"),
-    arbitrumrinkeby: getChainConfig("arbitrumrinkeby"),
+    arb: getChainConfig("arb"),
+    arbrinkeby: getChainConfig("arbrinkeby"),
 
     /* OPTIMISM L2 */
-    optimismmainnet: getChainConfig("optimismmainnet"),
+    optimism: getChainConfig("optimism"),
     optimismkovan: getChainConfig("optimismkovan"),
   },
   ovm: {
