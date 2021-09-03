@@ -1,7 +1,6 @@
 const { task } = require("hardhat/config");
 const fs = require("fs");
 const { execSync } = require("child_process");
-const { log } = require("../utils/utils.js");
 const { pascalCase } = require("../utils/string-utils.js");
 
 // e.g. npx hardhat flatfile --contract TestingContract
