@@ -20,8 +20,7 @@ require("hardhat-gas-reporter");
 require("@eth-optimism/plugins/hardhat/compiler");
 
 // require tasks
-require("./tasks/accounts");
-require("./tasks/flatfile");
+require("./tasks");
 
 const infuraUrl = (network) =>
   `https://${network}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
@@ -83,15 +82,6 @@ function getChainConfig(network) {
   };
 }
 
-const contractSizer = () =>
-  process.env.CONTRACT_SIZER
-    ? {
-        alphaSort: true,
-        runOnCompile: true,
-        disambiguatePaths: false,
-      }
-    : null;
-
 module.exports = {
   abiExporter: {
     path: "./abi_exporter",
@@ -100,7 +90,12 @@ module.exports = {
     // only: [':ERC20$'],
     spacing: 2,
   },
-  contractSizer,
+  contractSizer: () =>
+    process.env.CONTRACT_SIZER && {
+      alphaSort: true,
+      runOnCompile: true,
+      disambiguatePaths: false,
+    },
   defaultNetwork: "hardhat",
   etherscan: {
     apiKey:
@@ -159,7 +154,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.4",
+        version: "0.8.7",
         settings: {
           // Disable the optimizer when debugging
           // https://hardhat.org/hardhat-network/#solidity-optimizer-support
