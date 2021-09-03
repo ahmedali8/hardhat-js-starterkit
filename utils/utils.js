@@ -1,7 +1,5 @@
-const fs = require("fs");
 const { BigNumber } = require("@ethersproject/bignumber");
-const { execSync } = require("child_process");
-const { lowerCase, hyphenate } = require("./string-utils");
+const hre = require("hardhat");
 
 function log(str, val) {
   console.log(`${str} >>> `, val);
@@ -65,7 +63,9 @@ async function getContractInstance(contract, address) {
 
 async function deployContract(signer, contractName, args = []) {
   const Contract = await ethers.getContractFactory(contractName);
-  return await Contract.connect(signer).deploy(...args);
+  const contract = await Contract.connect(signer).deploy(...args);
+  await contract.deployed;
+  return contract;
 }
 
 function calculatePercentage(bn, percent) {
@@ -80,40 +80,32 @@ async function getTxGasPrice(tx) {
   return toGwei(tx.gasPrice);
 }
 
-function createArgFile(filename, args = []) {
-  let path = `arguments/${filename}`;
-  let data = `module.exports = ${JSON.stringify(args)}`;
-  fs.writeFileSync(path + ".js", data);
-}
-
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 async function delayLog(ms) {
   console.log(`waiting for ${ms / 1000}s...`);
   await delay(ms);
 }
 
+async function waitForConfirmations(tx, confirmations = 5) {
+  const { hash } = tx;
+  console.log(`waiting for ${confirmations} confirmations ...`);
+  await ethers.provider.waitForTransaction(hash, confirmations);
+}
+
 async function verifyContract(
-  networkName,
-  contractName,
-  contractAddr,
+  contractAddress,
   args = [],
-  ms = 5000
+  tx,
+  options = { ms: 60000, doConfirmation: true, confirm: 5 }
 ) {
-  let filename = hyphenate(contractName);
-  // log("filename", filename);
-
-  // create argument file
-  createArgFile(filename, args);
-
+  const { ms, doConfirmation, confirm } = options;
+  doConfirmation && waitForConfirmations(tx, confirm);
   await delayLog(ms);
 
-  // execute command
-  execSync(
-    `npx hardhat verify --contract contracts/${contractName}.sol:${contractName} --network ${lowerCase(
-      networkName
-    )} --constructor-args arguments/${filename}.js ${contractAddr}`,
-    { stdio: "inherit" }
-  );
+  await hre.run("verify:verify", {
+    address: contractAddress,
+    constructorArguments: args,
+  });
 }
 
 module.exports = {
@@ -135,7 +127,7 @@ module.exports = {
   calculatePercentage,
   getTxGasUsed,
   getTxGasPrice,
-  createArgFile,
+  waitForConfirmations,
   verifyContract,
   delay,
   delayLog,
