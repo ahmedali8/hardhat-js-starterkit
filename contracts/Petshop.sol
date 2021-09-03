@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -91,7 +91,7 @@ contract Petshop is Ownable, ERC721URIStorage {
         address to_,
         uint256 price_,
         string memory tokenURI_
-    ) public virtual onlyOwner() returns (uint256) {
+    ) public virtual onlyOwner returns (uint256) {
         uint256 tokenId_ = _tokenIdTracker.current();
 
         // mint pet
