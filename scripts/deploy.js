@@ -2,7 +2,6 @@ const {
   etherBalanceString: etherBalanceStr,
   deployContract,
   toWei,
-  toWeiString: toWeiStr,
   log,
   logString,
   logGas,
@@ -17,23 +16,18 @@ async function main() {
   console.log(`Deploying contracts with the account: ${owner.address}`);
   console.log(`Owner balance: ${await etherBalanceStr(owner.address)}`);
 
-  const NETWORK = "rinkeby";
-
   const args = [
     "testing new created token",
     "TCT",
-    toWeiStr("6000000"),
+    toWei("6000000"),
     owner.address,
   ];
   const testingContract = await deployContract(owner, "TestingContract", args);
-  await logGas(testingContract.deployTransaction);
-  if (chainId != 31337) {
-    await verifyContract(
-      NETWORK,
-      "TestingContract",
-      testingContract.address,
-      args
-    );
+  const tx = testingContract.deployTransaction;
+  await logGas(tx);
+
+  if (chainId != 31337 && chainId != 1337) {
+    await verifyContract(testingContract.address, args, tx);
   }
 }
 
