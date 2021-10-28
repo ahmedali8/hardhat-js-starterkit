@@ -3,9 +3,6 @@
  */
 require("dotenv").config();
 require("@nomiclabs/hardhat-waffle");
-// for web3 and truffle compatibility
-require("@nomiclabs/hardhat-web3");
-require("@nomiclabs/hardhat-truffle5");
 // verify contract on etherscan
 require("@nomiclabs/hardhat-etherscan");
 // for exporting abi in separate file
@@ -154,7 +151,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.7",
+        version: "0.8.9",
         settings: {
           // Disable the optimizer when debugging
           // https://hardhat.org/hardhat-network/#solidity-optimizer-support
