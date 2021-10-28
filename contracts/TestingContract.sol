@@ -13,7 +13,7 @@ contract TestingContract is ERC20 {
         _mint(_beneficiary, _totalSupply);
     }
 
-    function mint222222(address _account, uint256 _amount) public {
+    function mint(address _account, uint256 _amount) public {
         _mint(_account, _amount);
     }
 }
