@@ -7,6 +7,8 @@
     "url": "https://github.com/ahmedali8"
   },
   "devDependencies": {
+    "@commitlint/cli": "^14.1.0",
+    "@commitlint/config-conventional": "^14.1.0",
     "@eth-optimism/plugins": "^1.0.0-alpha.3",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.2",
@@ -15,7 +17,11 @@
     "@openzeppelin/test-helpers": "^0.5.11",
     "chai": "^4.3.4",
     "child_process": "^1.0.2",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^10.0.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.1.4",
     "hardhat": "^2.2.1",
@@ -24,6 +30,7 @@
     "hardhat-gas-reporter": "^1.0.4",
     "prettier": "^2.3.0",
     "prettier-plugin-solidity": "^1.0.0-beta.10",
+    "shx": "^0.3.3",
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "^0.0.5",
     "solidity-coverage": "^0.7.16"
@@ -53,5 +60,6 @@
     "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{js,json,md,sol}\"",
     "size": "hardhat size-contracts",
     "test": "hardhat test"
-  }
+  },
+  "packageManager": "yarn@3.1.0"
 }
