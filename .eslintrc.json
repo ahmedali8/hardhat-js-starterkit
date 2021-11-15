@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "ignorePatterns": ["node_modules/**/*"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  // "plugins": ["react", "prettier"],
+  "extends": ["eslint:recommended", "prettier"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-extra-boolean-cast": "off",
+    "no-constant-condition": "off",
+    "no-async-promise-executor": "off",
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}
