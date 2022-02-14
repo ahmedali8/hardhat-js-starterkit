@@ -4,7 +4,6 @@
 
 - [Hardhat](https://github.com/nomiclabs/hardhat): compile and run the smart contracts on a local development network
 - [Ethers](https://github.com/ethers-io/ethers.js/): Ethereum library and wallet implementation
-- [Web3js](https://github.com/ChainSafe/web3.js): Ethereum library and wallet implementation
 - [Waffle](https://github.com/EthWorks/Waffle): tooling for writing comprehensive smart contract tests
 - [Solhint](https://github.com/protofire/solhint): linter
 - [Solcover](https://github.com/sc-forks/solidity-coverage): code coverage
@@ -18,12 +17,20 @@ template" button at the top of the page.
 ### Pre Requisites
 
 Before running any command, you need to create a `.env` file and set all necassary environment variables.
-Follow the example in `.env.example`. If you don't already have a private key, use this [website](https://vanity-eth.tk/) to generate one.
+Follow the example in `.env.example`. You can either use mnemonic or individual private keys by setting
+
+```sh
+$ ACCOUNT_TYPE="MNEMONIC"
+or
+$ ACCOUNT_TYPE="PRIVATE_KEYS"
+```
+
+If you don't already have a mnemonic, use this [website](https://iancoleman.io/bip39/) to generate one Or if you don't already have a private key, use this [website](https://vanity-eth.tk/) to generate one.
 
 Then, proceed with installing dependencies:
 
 ```sh
-yarn install
+$ yarn install
 ```
 
 ### Compile
@@ -59,7 +66,12 @@ $ yarn coverage
 
 ### Report Gas
 
-See the gas usage per unit test and average gas per method call by setting `true` as the value for property `enabled` in `gasReporter` object.
+See the gas usage per unit test and average gas per method call:
+
+```sh
+$ REPORT_GAS=true yarn test
+```
+
 Optional:
 
 - See the actual fiat currency rates by setting your coingecko api key from [here](https://coinmarketcap.com/api/pricing/) in `.env` file or command.
@@ -68,7 +80,7 @@ Optional:
 
 ```sh
 $ GAS_PRICE=20
-$ COIN_MARKET_CAP_API_KEY=
+$ COIN_MARKET_CAP_API_KEY="your_api_key"
 $ yarn test
 ```
 
@@ -96,8 +108,6 @@ $ yarn deploy:network rinkeby
 
 ### Manual Verify
 
-This helps you verify the source code for your Solidity contracts on [etherscan](https://etherscan.io/) or [bscscan](https://bscscan.com/)
-
 ```sh
 $ npx hardhat verify --network <network> DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1" "Constructor argument 2"
 ```
@@ -105,24 +115,22 @@ $ npx hardhat verify --network <network> DEPLOYED_CONTRACT_ADDRESS "Constructor 
 For complex arguments you can refer [here](https://hardhat.org/plugins/nomiclabs-hardhat-etherscan.html)
 
 ```sh
-$ npx hardhat verify --contract contracts/CONTRACT_NAME.sol:CONTRACT_NAME --network <network> --constructor-args arguments/FILENAME.js DEPLOYED_CONTRACT_ADDRESS
+$ npx hardhat verify --contract contracts/CONTRACT_NAME.sol:CONTRACT_NAME --network <network> --constructor-args arguments.js DEPLOYED_CONTRACT_ADDRESS
 ```
 
-### Auto Deploy and Verify (using a single command)
+### Verify Contract Programmatically
 
-Deploy and automatically verify the contract using deploy script, this is possible by using `child_process` within the script which lets you
-run commands within the .js file. Every time we need to verify a contract we need to set the arguments that we passed in the constructor of contract 
-in the command or create an argument file and export it but now all this can be done automatically by using the `verifyContract` function in 
-the `utils/utils.js` file. An example deploy script is attached for reference.
-As of now it works on Etherscan and Bscscan, you must provide it's api key in `.env` file. (Enable one at a time and comment other).
-You can get the api key by loging in to respective explorer.
-Specify the correct network in the script and run this command with same network specified in the `hardhat.config.js`. e.g. rinkeby 
-Or run any script using
+Verify the contract using `verifyContract` function in [verify.js](https://github.com/ahmedali8/hardhat-starterkit/blob/main/utils/verify.js)
+
+Set etherscan api key in `.env` file or using command
 
 ```sh
-$ yarn deploy:network rinkeby
-$ npx hardhat run scripts/path_to_script --network rinkeby
+$ ETHERSCAN_API_KEY="your_api_key"
 ```
+
+If you don't already have an api key, use either of one [etherscan](https://etherscan.io/), [bscscan](https://bscscan.com/), [polygonscan](https://polygonscan.com/) according to the network you want. 
+
+Example deploy script with `verifyContract` function is [here](https://github.com/ahmedali8/hardhat-starterkit/blob/main/scripts/deploy.js)
 
 ### Tasks
 
@@ -134,6 +142,7 @@ contract name with `--contract` flag
 
 ```sh
 $ npx hardhat flatfile --contract CONTRACT_NAME
+or
 $ yarn flatfile:contract CONTRACT_NAME
 ```
 
