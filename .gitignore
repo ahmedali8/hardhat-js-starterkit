@@ -15,6 +15,7 @@
 **/dist
 **/node_modules
 **/abi_exporter
+**/flattened
 
 # files
 *.env
