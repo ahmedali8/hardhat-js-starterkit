@@ -1,26 +1,27 @@
 const { task } = require("hardhat/config");
-const fs = require("fs");
+const path = require("path");
 const { execSync } = require("child_process");
 const { pascalCase } = require("../utils/string-utils.js");
+const { ensureDirectory, writeFile } = require("../utils/file-helper");
 
 // e.g. npx hardhat flatfile --contract TestingContract
 task("flatfile", "Creates a flattened sol file")
   .addParam("contract", "Contract name")
   .setAction(async (taskArgs) => {
-    // log("taskArgs", taskArgs);
     const { contract } = taskArgs;
-    // log("contract", contract);
 
     const output = execSync(
       `npx hardhat flatten contracts/${contract}.sol`
     ).toString();
     console.log(output);
 
-    let filename = pascalCase(contract);
-    // log("filename", filename);
+    const filename = pascalCase(contract);
+    let outputFileName = path.join(
+      process.cwd(),
+      `./flattened/${filename}.txt`
+    );
+    ensureDirectory(path.dirname(outputFileName));
+    await writeFile(outputFileName, output);
 
-    let path = `flattened/${filename}`;
-    fs.writeFileSync(path + ".txt", output);
-
-    console.log(`Flattened file created at ${path}.txt`);
+    console.log(`Flattened file export done!`);
   });
