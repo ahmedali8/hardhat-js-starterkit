@@ -1,12 +1,8 @@
-const {
-  etherBalanceString: etherBalanceStr,
-  deployContract,
-  toWei,
-  log,
-  logString,
-  logGas,
-  verifyContract,
-} = require("../utils/utils.js");
+const { ethers } = require("hardhat");
+const { etherBalance, logGas } = require("../utils");
+const { toWei } = require("../utils/format");
+const { deployContract } = require("../utils/contracts");
+const { verifyContract } = require("../utils/verify");
 
 async function main() {
   const { chainId, name } = await ethers.provider.getNetwork();
@@ -14,7 +10,9 @@ async function main() {
 
   console.log(`Connected to name: ${name} & chainId: ${chainId}`);
   console.log(`Deploying contracts with the account: ${owner.address}`);
-  console.log(`Owner balance: ${await etherBalanceStr(owner.address)}`);
+  console.log(
+    `Owner balance: ${(await etherBalance(owner.address)).toString()}`
+  );
 
   const args = [
     "testing new created token",
