@@ -14,7 +14,7 @@
       "version": "detect"
     }
   },
-  // "plugins": ["react", "prettier"],
+  "plugins": ["prettier"],
   "extends": ["eslint:recommended", "prettier"],
   "rules": {
     "no-unused-vars": "warn",
