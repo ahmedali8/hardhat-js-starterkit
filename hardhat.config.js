@@ -1,7 +1,4 @@
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
-require("dotenv").config();
+// hardhat waffle
 require("@nomiclabs/hardhat-waffle");
 // verify contract on etherscan
 require("@nomiclabs/hardhat-etherscan");
@@ -13,29 +10,47 @@ require("solidity-coverage");
 require("hardhat-contract-sizer");
 // hardhat gas reporter (uncomment to enable)
 require("hardhat-gas-reporter");
-// A plugin that brings OVM compiler support to Hardhat projects.
-require("@eth-optimism/plugins/hardhat/compiler");
 
 // require tasks
 require("./tasks");
 
-const infuraUrl = (network) =>
-  `https://${network}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
+const { resolve } = require("path");
+const { config: dotenvConfig } = require("dotenv");
 
-const alchemyUrl = (network) =>
-  `https://${network}.g.alchemy.com/v2/${process.env.ALCHEMY_PROJECT_ID}-_s`;
+dotenvConfig({ path: resolve(__dirname, "./.env") });
+
+const ACCOUNT_TYPE = process.env.ACCOUNT_TYPE;
+const mnemonic = process.env.MNEMONIC;
+if (ACCOUNT_TYPE === "MNEMONIC" && !mnemonic) {
+  throw new Error("Please set your MNEMONIC in a .env file");
+}
+if (
+  ACCOUNT_TYPE === "PRIVATE_KEYS" &&
+  typeof process.env.PRIVATE_KEY_1 === "undefined"
+) {
+  throw new Error("Please set at least one PRIVATE_KEY_1 in a .env file");
+}
+
+const INFURA_KEY = process.env.INFURA_PROJECT_ID;
+const BSC_MAINNET_KEY = process.env.BSC_MAINNET_RPC_URL;
+const BSC_TESTNET_KEY = process.env.BSC_TESTNET_RPC_URL;
+if (typeof INFURA_KEY === "undefined") {
+  throw new Error(`INFURA_PROJECT_ID must be a defined environment variable`);
+}
+
+const infuraUrl = (network) => `https://${network}.infura.io/v3/${INFURA_KEY}`;
 
 const networks = {
-  arb: {
+  arbone: {
     chainId: 42161,
-    url: alchemyUrl("arb-mainnet"),
+    url: infuraUrl("arbitrum-mainnet"),
   },
   arbrinkeby: {
     chainId: 421611,
-    url: alchemyUrl("arb-rinkeby"),
+    url: infuraUrl("arbitrum-rinkeby"),
   },
-  bnb: { chainId: 56, url: process.env.BSC_MAINNET_RPC_URL },
-  bnbt: { chainId: 97, url: process.env.BSC_TESTNET_RPC_URL },
+  bnb: { chainId: 56, url: BSC_MAINNET_KEY },
+  bnbt: { chainId: 97, url: BSC_TESTNET_KEY },
   ganache: { chainId: 1337, url: "http://127.0.0.1:7545" },
   goerli: { chainId: 5, url: infuraUrl("goerli") },
   hardhat: { chainId: 31337 },
@@ -43,38 +58,44 @@ const networks = {
   mainnet: { chainId: 1, url: infuraUrl("mainnet") },
   matic: {
     chainId: 137,
-    url: alchemyUrl("polygon-mainnet"),
+    url: infuraUrl("polygon-mainnet"),
   },
   maticmum: {
     chainId: 80001,
-    url: alchemyUrl("polygon-mumbai"),
+    url: infuraUrl("polygon-mumbai"),
   },
   optimism: {
     chainId: 10,
-    url: "https://mainnet.optimism.io/",
+    url: infuraUrl("optimism-mainnet"),
   },
   optimismkovan: {
     chainId: 69,
-    url: "https://kovan.optimism.io",
+    url: infuraUrl("optimism-kovan"),
   },
   rinkeby: { chainId: 4, url: infuraUrl("rinkeby") },
   ropsten: { chainId: 3, url: infuraUrl("ropsten") },
 };
 
 // can add as many private keys as you want
-const accounts = [
-  `0x${process.env.PRIVATE_KEY_1}`,
-  // `0x${process.env.PRIVATE_KEY_2}`,
-  // `0x${process.env.PRIVATE_KEY_3}`,
-  // `0x${process.env.PRIVATE_KEY_4}`,
-  // `0x${process.env.PRIVATE_KEY_5}`,
-];
+const accounts =
+  ACCOUNT_TYPE === "MNEMONIC"
+    ? {
+        count: 10,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      }
+    : [
+        `0x${process.env.PRIVATE_KEY_1}`,
+        // `0x${process.env.PRIVATE_KEY_2}`,
+        // `0x${process.env.PRIVATE_KEY_3}`,
+        // `0x${process.env.PRIVATE_KEY_4}`,
+        // `0x${process.env.PRIVATE_KEY_5}`,
+      ];
 
 function getChainConfig(network) {
   return {
     accounts,
     chainId: networks[network].chainId,
-    from: accounts[0],
     url: networks[network].url,
   };
 }
@@ -84,7 +105,6 @@ module.exports = {
     path: "./abi_exporter",
     clear: true,
     flat: true,
-    // only: [':ERC20$'],
     spacing: 2,
   },
   contractSizer: () =>
@@ -95,12 +115,10 @@ module.exports = {
     },
   defaultNetwork: "hardhat",
   etherscan: {
-    apiKey:
-      process.env.ETHERSCAN_API_KEY || process.env.BSCSCAN_API_KEY || null,
+    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
   gasReporter: {
-    enabled: true, // set false to disable
-    // enabled: process.env.REPORT_GAS ? true : false, // this is not working as of now
+    enabled: process.env.REPORT_GAS ? true : false,
     currency: "USD",
     // if commented out then it fetches from ethGasStationAPI
     // gasPrice: process.env.GAS_PRICE,
@@ -132,15 +150,12 @@ module.exports = {
     maticmum: getChainConfig("maticmum"),
 
     /* ARBITRUM L2 */
-    arb: getChainConfig("arb"),
+    arb: getChainConfig("arbone"),
     arbrinkeby: getChainConfig("arbrinkeby"),
 
     /* OPTIMISM L2 */
     optimism: getChainConfig("optimism"),
     optimismkovan: getChainConfig("optimismkovan"),
-  },
-  ovm: {
-    solcVersion: "0.8.4", // Your version goes here.
   },
   paths: {
     artifacts: "./artifacts",
@@ -151,8 +166,13 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.9",
+        version: "0.8.11",
         settings: {
+          metadata: {
+            // Not including the metadata hash
+            // https://github.com/paulrberg/solidity-template/issues/31
+            bytecodeHash: "none",
+          },
           // Disable the optimizer when debugging
           // https://hardhat.org/hardhat-network/#solidity-optimizer-support
           optimizer: {
