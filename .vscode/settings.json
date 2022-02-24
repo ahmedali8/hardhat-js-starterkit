@@ -11,5 +11,5 @@
       "strings": true
     }
   },
-  "solidity.compileUsingRemoteVersion": "v0.8.7+commit.e28d00a7"
+  "solidity.compileUsingRemoteVersion": "v0.8.12+commit.f00d7308"
 }
