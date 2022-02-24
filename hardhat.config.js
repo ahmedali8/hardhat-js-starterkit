@@ -6,8 +6,10 @@ require("@nomiclabs/hardhat-etherscan");
 require("solidity-coverage");
 // hardhat contract sizer
 require("hardhat-contract-sizer");
-// hardhat gas reporter (uncomment to enable)
+// hardhat gas reporter
 require("hardhat-gas-reporter");
+// generate natspec docs
+require("hardhat-docgen");
 
 // require tasks
 require("./tasks");
@@ -148,6 +150,11 @@ module.exports = {
     disambiguatePaths: false,
   },
   defaultNetwork: "hardhat",
+  docgen: {
+    path: "./docs",
+    clear: true,
+    runOnCompile: process.env.DOC_GEN ? true : false,
+  },
   etherscan: {
     apiKey: {
       // ETHEREUM
