@@ -1,8 +1,8 @@
 const { task } = require("hardhat/config");
 const path = require("path");
 const { execSync } = require("child_process");
-const { pascalCase } = require("../utils/string-utils.js");
-const { ensureDirectory, writeFile } = require("../utils/file-helper");
+const { pascalCase } = require("../utils/string.js");
+const { ensureDirectory, writeFile } = require("../utils/files");
 
 // e.g. npx hardhat flatfile --contract TestingContract
 task("flatfile", "Creates a flattened sol file")
