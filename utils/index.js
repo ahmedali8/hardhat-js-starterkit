@@ -1,3 +1,5 @@
+"use strict";
+
 const { ethers } = require("hardhat");
 const { getAddress } = require("@ethersproject/address");
 const { toWei, toGwei } = require("./format");

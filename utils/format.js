@@ -1,3 +1,5 @@
+"use strict";
+
 const { formatUnits, parseUnits } = require("@ethersproject/units");
 const { BigNumber } = require("@ethersproject/bignumber");
 

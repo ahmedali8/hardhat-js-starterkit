@@ -1,3 +1,5 @@
+"use strict";
+
 const { ethers } = require("hardhat");
 const { getContractAt, getContractFactory } = ethers;
 

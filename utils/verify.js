@@ -1,3 +1,5 @@
+"use strict";
+
 const { ethers, run } = require("hardhat");
 const { delayLog } = require("./index");
 
