@@ -3,7 +3,20 @@ pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
+/**
+ *@title Testing ERC20 contract
+ *@author Ahmed Ali <github.com/ahmedali8>
+ *@notice You can use this contract for creation of ERC20 token
+ */
 contract TestingContract is ERC20 {
+    /**
+     * @dev Initializes `ERC20` token.
+     *
+     * @param _name string - name of token
+     * @param _symbol string - symbol of token
+     * @param _totalSupply uint256 - total supply of token
+     * @param _beneficiary address - address of beneficiary to receive totalsupply of tokens
+     */
     constructor(
         string memory _name,
         string memory _symbol,
@@ -13,6 +26,11 @@ contract TestingContract is ERC20 {
         _mint(_beneficiary, _totalSupply);
     }
 
+    /**
+     * @dev Mints `_amount` ERC20 tokens to `_account`.
+     * @param _account address - address of beneficiary to receive tokens
+     * @param _amount uint256 - amount of tokens to receive
+     */
     function mint(address _account, uint256 _amount) public {
         _mint(_account, _amount);
     }
