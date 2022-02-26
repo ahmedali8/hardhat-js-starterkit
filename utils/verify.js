@@ -1,36 +1,33 @@
 "use strict";
 
-const { ethers, run } = require("hardhat");
-const { delayLog } = require("./index");
+const { run } = require("hardhat");
+const { delayLog } = require("./misc");
 
-async function waitForConfirmations(tx, confirmations = 5) {
+async function waitForConfirmations(tx, waitConfirmations = 5) {
   if (!tx) return;
-  const { hash } = tx;
-  console.log(`waiting for ${confirmations} confirmations ...`);
-  await ethers.provider.waitForTransaction(hash, confirmations);
+  console.log(`waiting for ${waitConfirmations} confirmations ...`);
+  await tx.wait(waitConfirmations);
 }
 
 /**
  * Programmatically verify a contract
+ * @param {*} contractName contract name in string
  * @param {*} contractAddress contract address in string
  * @param {*} args constructor args in array
- * @param tx optional tx
- * @param options optionally set {ms, doConfirmation, confirm}
+ * @param delay delay time in ms
  */
-async function verifyContract(
+async function verifyContract({
+  contractName,
   contractAddress,
   args = [],
-  tx,
-  options = { ms: 60_000, doConfirmation: true, confirm: 5 }
-) {
-  const { ms, doConfirmation, confirm } = options;
-  // wait for confirmation if tx is available
-  if (doConfirmation && tx) waitForConfirmations(tx, confirm);
-  await delayLog(ms);
+  delay = 60_000,
+}) {
+  await delayLog(delay);
 
   await run("verify:verify", {
     address: contractAddress,
     constructorArguments: args,
+    contract: `contracts/${contractName}.sol:${contractName}`,
   });
 }
 
