@@ -1,17 +1,11 @@
-// hardhat waffle
 require("@nomiclabs/hardhat-waffle");
-// verify contract on etherscan
 require("@nomiclabs/hardhat-etherscan");
-// sol coverage
 require("solidity-coverage");
-// hardhat contract sizer
 require("hardhat-contract-sizer");
-// hardhat gas reporter
 require("hardhat-gas-reporter");
-// generate natspec docs
 require("hardhat-docgen");
+require("@tenderly/hardhat-tenderly");
 
-// require tasks
 require("./tasks");
 
 const { resolve } = require("path");
