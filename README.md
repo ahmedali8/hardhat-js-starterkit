@@ -33,6 +33,14 @@ Then, proceed with installing dependencies:
 $ yarn install
 ```
 
+### Run a Hardhat chain
+
+To run a local network with all your contracts in it, run the following:
+
+```
+$ yarn chain
+```
+
 ### Compile
 
 Compile the smart contracts with Hardhat:
@@ -40,6 +48,7 @@ Compile the smart contracts with Hardhat:
 ```sh
 $ yarn compile
 ```
+
 ### Lint Solidity
 
 Lint the Solidity code:
@@ -106,6 +115,20 @@ Deploy the contracts to a specific network, such as the Rinkeby testnet:
 $ yarn deploy:network rinkeby
 ```
 
+### View Contracts Size
+
+```
+$ yarn size
+```
+
+or turn on for every compile
+
+```
+$ CONTRACT_SIZER=true
+```
+
+## Verify Contract
+
 ### Manual Verify
 
 ```sh
@@ -122,7 +145,7 @@ $ npx hardhat verify --contract contracts/CONTRACT_NAME.sol:CONTRACT_NAME --netw
 
 Verify the contract using `verifyContract` function in [verify.js](https://github.com/ahmedali8/hardhat-starterkit/blob/main/utils/verify.js)
 
-Set etherscan api key in `.env` file or using command
+Set etherscan/bscscan/polygonscan api key in `.env` file or using command, refer to `.env.example` for more insight.
 
 ```sh
 $ ETHERSCAN_API_KEY="your_api_key"
@@ -132,9 +155,9 @@ If you don't already have an api key, use either of one [etherscan](https://ethe
 
 Example deploy script with `verifyContract` function is [here](https://github.com/ahmedali8/hardhat-starterkit/blob/main/scripts/deploy.js)
 
-### Tasks
+## Additional Tasks
 
-#### flatfile
+### flatfile
 
 We often need to flatten our code for verification purposes or any other but the existing default `flatten` task requires manual copy-paste from terminal
 and creation of whatever file extension we want but we can automate the creation of the flatten file by using a new `flatfile` task and providing the
@@ -162,3 +185,13 @@ compiler version is to add the following fields to your VSCode user settings or 
 ```
 
 Where of course `v0.8.4+commit.c7e474f2` can be replaced with any other version.
+
+## Contributing
+
+Contributions are always welcome! Open a PR or an issue!
+
+## Thank You!
+
+## Resources
+
+- [Hardhat Documentation](https://hardhat.org/getting-started/)
