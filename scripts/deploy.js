@@ -1,18 +1,14 @@
+"use strict";
+
 const { ethers } = require("hardhat");
-const { etherBalance, logGas } = require("../utils");
 const { toWei } = require("../utils/format");
 const { deployContract } = require("../utils/contracts");
 const { verifyContract } = require("../utils/verify");
+const { getExtraGasInfo } = require("../utils/misc");
 
 async function main() {
-  const { chainId, name } = await ethers.provider.getNetwork();
+  const { chainId } = await ethers.provider.getNetwork();
   const [owner] = await ethers.getSigners();
-
-  console.log(`Connected to name: ${name} & chainId: ${chainId}`);
-  console.log(`Deploying contracts with the account: ${owner.address}`);
-  console.log(
-    `Owner balance: ${(await etherBalance(owner.address)).toString()}`
-  );
 
   const args = [
     "testing new created token",
@@ -20,12 +16,43 @@ async function main() {
     toWei("6000000"),
     owner.address,
   ];
-  const testingContract = await deployContract(owner, "TestingContract", args);
-  const tx = testingContract.deployTransaction;
-  await logGas(tx);
+  const contract = await deployContract({
+    signer: owner,
+    contractName: "TestingContract",
+    args: args,
+  });
 
-  if (chainId != 31337 && chainId != 1337) {
-    await verifyContract(testingContract.address, args, tx);
+  /*
+  // If you want to send some ETH to a contract on deploy (make your constructor payable!)
+  const contract = await deployContract({
+    signer: owner,
+    contractName: "TestingContract",
+    args: args,
+    overrides: {
+      value: toWei("1"), // send 1 ether
+    },
+  });
+  */
+
+  /*
+  // Mint 100 tokens for user
+  const [_, user] = await ethers.getSigners();
+  const tx = await contract.connect(user).mint(user.address, toWei("100"));
+  const extraGasInfo = await getExtraGasInfo(tx);
+  console.log("Minting: ", extraGasInfo);
+  */
+
+  // You don't want to verify on localhost
+  try {
+    if (chainId != 31337 && chainId != 1337) {
+      await verifyContract({
+        contractName: "TestingContract",
+        contractAddress: contract.address,
+        args: args,
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
