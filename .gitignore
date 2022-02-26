@@ -16,6 +16,7 @@
 **/node_modules
 **/abi_exporter
 **/flattened
+**/docs
 
 # files
 *.env
@@ -25,3 +26,4 @@ coverage.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+tenderly.yaml
