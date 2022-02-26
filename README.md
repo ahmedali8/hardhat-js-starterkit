@@ -115,6 +115,16 @@ Deploy the contracts to a specific network, such as the Rinkeby testnet:
 $ yarn deploy:network rinkeby
 ```
 
+### Generate Natspec Doc
+
+Generate natspec documentation for your contracts by runing
+
+```
+$ yarn docgen
+```
+
+For more information on Natspec [click here](https://docs.soliditylang.org/en/v0.8.12/natspec-format.html#natspec) and for hardhat docgen [click here](https://github.com/ItsNickBarry/hardhat-docgen)
+
 ### View Contracts Size
 
 ```
