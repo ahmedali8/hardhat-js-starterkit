@@ -4,7 +4,6 @@ require("solidity-coverage");
 require("hardhat-contract-sizer");
 require("hardhat-gas-reporter");
 require("hardhat-docgen");
-require("@tenderly/hardhat-tenderly");
 
 require("./tasks");
 
