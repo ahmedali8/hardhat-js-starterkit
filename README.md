@@ -65,6 +65,16 @@ Run the Mocha tests:
 $ yarn test
 ```
 
+### Forking mainnet
+
+Starts a local hardhat chain with the state of the last `mainnet` block
+
+```
+$ yarn fork
+```
+
+For some helpful fork utils checkout [fork.js](https://github.com/ahmedali8/hardhat-js-starterkit/blob/main/utils/fork.js)
+
 ### Coverage
 
 Generate the code coverage report:
