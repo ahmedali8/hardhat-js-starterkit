@@ -39,75 +39,62 @@ const networks = {
   mainnet: {
     chainId: 1,
     url: infuraUrl("mainnet"),
-    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
   kovan: {
     chainId: 42,
     url: infuraUrl("kovan"),
-    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
   goerli: {
     chainId: 5,
     url: infuraUrl("goerli"),
-    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
   rinkeby: {
     chainId: 4,
     url: infuraUrl("rinkeby"),
-    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
   ropsten: {
     chainId: 3,
     url: infuraUrl("ropsten"),
-    apiKey: process.env.ETHERSCAN_API_KEY || null,
   },
 
   // BINANCE SMART CHAIN
   bsc: {
     chainId: 56,
     url: process.env.BSC_MAINNET_RPC_URL,
-    apiKey: process.env.BSCSCAN_API_KEY || null,
   },
   bscTestnet: {
     chainId: 97,
     url: process.env.BSC_TESTNET_RPC_URL,
-    apiKey: process.env.BSCSCAN_API_KEY || null,
   },
 
   // MATIC/POLYGON
   polygon: {
     chainId: 137,
     url: infuraUrl("polygon-mainnet"),
-    apiKey: process.env.POLYGONSCAN_API_KEY || null,
   },
   polygonMumbai: {
     chainId: 80001,
     url: infuraUrl("polygon-mumbai"),
-    apiKey: process.env.POLYGONSCAN_API_KEY || null,
   },
 
   // OPTIMISM
   optimisticEthereum: {
     chainId: 10,
     url: infuraUrl("optimism-mainnet"),
-    apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || null,
   },
   optimisticKovan: {
     chainId: 69,
     url: infuraUrl("optimism-kovan"),
-    apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || null,
   },
 
   // ARBITRUM
   arbitrumOne: {
     chainId: 42161,
     url: infuraUrl("arbitrum-mainnet"),
-    apiKey: process.env.ARBISCAN_API_KEY || null,
   },
   arbitrumTestnet: {
     chainId: 421611,
     url: infuraUrl("arbitrum-rinkeby"),
-    apiKey: process.env.ARBISCAN_API_KEY || null,
   },
 };
 
@@ -132,7 +119,6 @@ function getChainConfig(network) {
     accounts,
     chainId: networks[network].chainId,
     url: networks[network].url,
-    apiKey: networks[network].apiKey,
   };
 }
 
@@ -151,18 +137,18 @@ module.exports = {
   etherscan: {
     apiKey: {
       // ETHEREUM
-      mainnet: getChainConfig("mainnet").apiKey,
-      ropsten: getChainConfig("ropsten").apiKey,
-      rinkeby: getChainConfig("rinkeby").apiKey,
-      goerli: getChainConfig("goerli").apiKey,
+      mainnet: process.env.ETHERSCAN_API_KEY,
+      ropsten: process.env.ETHERSCAN_API_KEY,
+      rinkeby: process.env.ETHERSCAN_API_KEY,
+      goerli: process.env.ETHERSCAN_API_KEY,
 
       // BINANCE SMART CHAIN
-      bsc: getChainConfig("bsc").apiKey,
-      bscTestnet: getChainConfig("bscTestnet").apiKey,
+      bsc: process.env.BSCSCAN_API_KEY,
+      bscTestnet: process.env.BSCSCAN_API_KEY,
 
       // MATIC/POLYGON
-      polygon: getChainConfig("polygon").apiKey,
-      polygonMumbai: getChainConfig("polygonMumbai").apiKey,
+      polygon: process.env.POLYGONSCAN_API_KEY,
+      polygonMumbai: process.env.POLYGONSCAN_API_KEY,
     },
   },
   gasReporter: {

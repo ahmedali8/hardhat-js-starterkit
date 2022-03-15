@@ -31,7 +31,7 @@ contract TestingContract is ERC20 {
      * @param _account address - address of beneficiary to receive tokens
      * @param _amount uint256 - amount of tokens to receive
      */
-    function mint(address _account, uint256 _amount) public {
+    function mint3432523424234(address _account, uint256 _amount) public {
         _mint(_account, _amount);
     }
 }

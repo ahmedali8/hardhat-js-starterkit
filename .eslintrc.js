@@ -19,5 +19,6 @@ module.exports = {
     "prefer-template": "off",
     "no-console": "off",
     "func-names": "off",
+    "import/no-dynamic-require": "off",
   },
 };
