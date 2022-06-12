@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
- *@title Testing ERC20 contract
+ *@title ERC20 Token contract
  *@author Ahmed Ali <github.com/ahmedali8>
  *@notice You can use this contract for creation of ERC20 token
  */
-contract TestingContract is ERC20 {
+contract Token is ERC20 {
     /**
      * @dev Initializes `ERC20` token.
      *
@@ -31,7 +31,7 @@ contract TestingContract is ERC20 {
      * @param _account address - address of beneficiary to receive tokens
      * @param _amount uint256 - amount of tokens to receive
      */
-    function mint3432523424234(address _account, uint256 _amount) public {
+    function mint(address _account, uint256 _amount) public {
         _mint(_account, _amount);
     }
 }

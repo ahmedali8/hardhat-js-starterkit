@@ -2,7 +2,7 @@ const { task } = require("hardhat/config");
 const path = require("path");
 const { execSync } = require("child_process");
 const { pascalCase } = require("../utils/string.js");
-const { ensureDirectory, writeFile } = require("../utils/files");
+const { ensureDirectoryExists, writeFile } = require("../utils/files");
 
 // e.g. npx hardhat flatfile --contract TestingContract
 task("flatfile", "Creates a flattened sol file")
@@ -20,7 +20,7 @@ task("flatfile", "Creates a flattened sol file")
       process.cwd(),
       `./flattened/${filename}.txt`
     );
-    ensureDirectory(path.dirname(outputFileName));
+    ensureDirectoryExists(path.dirname(outputFileName));
     await writeFile(outputFileName, output);
 
     console.log(`Flattened file export done!`);

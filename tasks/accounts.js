@@ -1,14 +1,20 @@
 const { task } = require("hardhat/config");
+const { fromWei } = require("../utils/format");
 
-task("accounts", "Prints the list of accounts", async () => {
+task("accounts", "Prints the list of accounts", async (_, { ethers }) => {
   const accounts = await ethers.getSigners();
 
+  const accountsArray = [];
+
   for (const account of accounts) {
-    console.log(
-      `${account.address}: ${ethers.utils.formatUnits(
-        await ethers.provider.getBalance(account.address),
-        "ether"
-      )}`
-    );
+    const address = account.address;
+    const balanceInETH = fromWei(await account.getBalance());
+
+    accountsArray.push({
+      address,
+      balanceInETH,
+    });
   }
+
+  console.table(accountsArray);
 });

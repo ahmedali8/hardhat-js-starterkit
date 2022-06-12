@@ -1,4 +1,4 @@
-const { network } = require("hardhat");
+const { network, ethers } = require("hardhat");
 
 async function resetHardhat() {
   await network.provider.request({

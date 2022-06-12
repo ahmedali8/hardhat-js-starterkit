@@ -3,9 +3,12 @@ require("@nomiclabs/hardhat-etherscan");
 require("solidity-coverage");
 require("hardhat-contract-sizer");
 require("hardhat-gas-reporter");
-require("hardhat-docgen");
+require("@primitivefi/hardhat-dodoc");
+require("hardhat-test-utils");
 
 require("./tasks");
+const { API_KEYS } = require("./config/api-keys");
+const { networks } = require("./config/networks");
 
 const { resolve } = require("path");
 const { config: dotenvConfig } = require("dotenv");
@@ -24,99 +27,27 @@ if (
   throw new Error("Please set at least one PRIVATE_KEY_1 in a .env file");
 }
 
-const INFURA_KEY = process.env.INFURA_PROJECT_ID;
-if (typeof INFURA_KEY === "undefined") {
-  throw new Error(`INFURA_PROJECT_ID must be a defined environment variable`);
-}
-
-const infuraUrl = (network) => `https://${network}.infura.io/v3/${INFURA_KEY}`;
-
-const networks = {
-  hardhat: { chainId: 31337 },
-  ganache: { chainId: 1337, url: "http://127.0.0.1:7545" },
-
-  // ETHEREUM
-  mainnet: {
-    chainId: 1,
-    url: infuraUrl("mainnet"),
-  },
-  kovan: {
-    chainId: 42,
-    url: infuraUrl("kovan"),
-  },
-  goerli: {
-    chainId: 5,
-    url: infuraUrl("goerli"),
-  },
-  rinkeby: {
-    chainId: 4,
-    url: infuraUrl("rinkeby"),
-  },
-  ropsten: {
-    chainId: 3,
-    url: infuraUrl("ropsten"),
-  },
-
-  // BINANCE SMART CHAIN
-  bsc: {
-    chainId: 56,
-    url: process.env.BSC_MAINNET_RPC_URL,
-  },
-  bscTestnet: {
-    chainId: 97,
-    url: process.env.BSC_TESTNET_RPC_URL,
-  },
-
-  // MATIC/POLYGON
-  polygon: {
-    chainId: 137,
-    url: infuraUrl("polygon-mainnet"),
-  },
-  polygonMumbai: {
-    chainId: 80001,
-    url: infuraUrl("polygon-mumbai"),
-  },
-
-  // OPTIMISM
-  optimisticEthereum: {
-    chainId: 10,
-    url: infuraUrl("optimism-mainnet"),
-  },
-  optimisticKovan: {
-    chainId: 69,
-    url: infuraUrl("optimism-kovan"),
-  },
-
-  // ARBITRUM
-  arbitrumOne: {
-    chainId: 42161,
-    url: infuraUrl("arbitrum-mainnet"),
-  },
-  arbitrumTestnet: {
-    chainId: 421611,
-    url: infuraUrl("arbitrum-rinkeby"),
-  },
+const getAccounts = () => {
+  if (ACCOUNT_TYPE === "MNEMONIC")
+    return {
+      mnemonic,
+      count: 10,
+      path: "m/44'/60'/0'/0",
+    };
+  // can add as many private keys as you want
+  else
+    return [
+      `0x${process.env.PRIVATE_KEY_1}`,
+      // `0x${process.env.PRIVATE_KEY_2}`,
+      // `0x${process.env.PRIVATE_KEY_3}`,
+      // `0x${process.env.PRIVATE_KEY_4}`,
+      // `0x${process.env.PRIVATE_KEY_5}`,
+    ];
 };
-
-// can add as many private keys as you want
-const accounts =
-  ACCOUNT_TYPE === "MNEMONIC"
-    ? {
-        count: 10,
-        mnemonic,
-        path: "m/44'/60'/0'/0",
-      }
-    : [
-        `0x${process.env.PRIVATE_KEY_1}`,
-        // `0x${process.env.PRIVATE_KEY_2}`,
-        // `0x${process.env.PRIVATE_KEY_3}`,
-        // `0x${process.env.PRIVATE_KEY_4}`,
-        // `0x${process.env.PRIVATE_KEY_5}`,
-      ];
 
 function getChainConfig(network) {
   return {
-    accounts,
+    accounts: getAccounts(),
     chainId: networks[network].chainId,
     url: networks[network].url,
   };
@@ -129,27 +60,16 @@ module.exports = {
     disambiguatePaths: false,
   },
   defaultNetwork: "hardhat",
-  docgen: {
-    path: "./docs",
-    clear: true,
-    runOnCompile: process.env.DOC_GEN ? true : false,
+  dodoc: {
+    runOnCompile: false,
+    debugMode: false,
+    keepFileStructure: true,
+    freshOutput: true,
+    outputDir: "./generated/docs",
+    include: ["contracts"],
   },
   etherscan: {
-    apiKey: {
-      // ETHEREUM
-      mainnet: process.env.ETHERSCAN_API_KEY,
-      ropsten: process.env.ETHERSCAN_API_KEY,
-      rinkeby: process.env.ETHERSCAN_API_KEY,
-      goerli: process.env.ETHERSCAN_API_KEY,
-
-      // BINANCE SMART CHAIN
-      bsc: process.env.BSCSCAN_API_KEY,
-      bscTestnet: process.env.BSCSCAN_API_KEY,
-
-      // MATIC/POLYGON
-      polygon: process.env.POLYGONSCAN_API_KEY,
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY,
-    },
+    apiKey: API_KEYS,
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS ? true : false,
@@ -161,27 +81,44 @@ module.exports = {
     src: "./contracts",
   },
   networks: {
-    hardhat: {
-      chainId: networks["hardhat"].chainId,
+    // LOCAL
+    hardhat: { chainId: 31337 },
+    "truffle-dashboard": {
+      url: "http://localhost:24012/rpc",
     },
-    ganache: {
-      chainId: networks["ganache"].chainId,
-      url: networks["ganache"].url,
-    },
+    ganache: { chainId: 1337, url: "http://127.0.0.1:7545" },
 
     // ETHEREUM
     mainnet: getChainConfig("mainnet"),
-    ropsten: getChainConfig("ropsten"),
-    rinkeby: getChainConfig("rinkeby"),
+    kovan: getChainConfig("kovan"),
     goerli: getChainConfig("goerli"),
+    rinkeby: getChainConfig("rinkeby"),
+    ropsten: getChainConfig("ropsten"),
+    sepolia: getChainConfig("sepolia"),
 
     // BINANCE SMART CHAIN
     bsc: getChainConfig("bsc"),
-    bscTestnet: getChainConfig("bscTestnet"),
+    "bsc-testnet": getChainConfig("bsc-testnet"),
 
     // MATIC/POLYGON
-    polygon: getChainConfig("polygon"),
-    polygonMumbai: getChainConfig("polygonMumbai"),
+    "polygon-mainnet": getChainConfig("polygon-mainnet"),
+    "polygon-mumbai": getChainConfig("polygon-mumbai"),
+
+    // OPTIMISM
+    "optimism-mainnet": getChainConfig("optimism-mainnet"),
+    "optimism-kovan": getChainConfig("optimism-kovan"),
+
+    // ARBITRUM
+    "arbitrum-mainnet": getChainConfig("arbitrum-mainnet"),
+    "arbitrum-rinkeby": getChainConfig("arbitrum-rinkeby"),
+
+    // AVALANCHE
+    "avalanche-mainnet": getChainConfig("avalanche-mainnet"),
+    "fuji-avalance": getChainConfig("fuji-avalance"),
+
+    // FANTOM
+    "fantom-mainnet": getChainConfig("fantom-mainnet"),
+    "fantom-testnet": getChainConfig("fantom-testnet"),
   },
   paths: {
     artifacts: "./artifacts",
@@ -192,7 +129,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.12",
+        version: "0.8.14",
         settings: {
           metadata: {
             // Not including the metadata hash

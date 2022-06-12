@@ -10,6 +10,8 @@ async function main() {
   const { chainId } = await ethers.provider.getNetwork();
   const [owner] = await ethers.getSigners();
 
+  const CONTRACT_NAME = "Token";
+
   const args = [
     "testing new created token",
     "TCT",
@@ -18,7 +20,7 @@ async function main() {
   ];
   const contract = await deployContract({
     signer: owner,
-    contractName: "TestingContract",
+    contractName: CONTRACT_NAME,
     args: args,
   });
 
@@ -26,7 +28,7 @@ async function main() {
   // If you want to send some ETH to a contract on deploy (make your constructor payable!)
   const contract = await deployContract({
     signer: owner,
-    contractName: "TestingContract",
+    contractName: CONTRACT_NAME,
     args: args,
     overrides: {
       value: toWei("1"), // send 1 ether
@@ -43,17 +45,19 @@ async function main() {
   */
 
   // You don't want to verify on localhost
-  try {
-    if (chainId != 31337 && chainId != 1337) {
-      await verifyContract({
-        contractName: "TestingContract",
-        contractAddress: contract.address,
-        args: args,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  // uncomment below code to programmatically verify contract
+  // try {
+  //   if (chainId != 31337 && chainId != 1337) {
+  //     const contractPath = `contracts/${CONTRACT_NAME}.sol:${CONTRACT_NAME}`;
+  //     await verifyContract({
+  //       contractPath: contractPath,
+  //       contractAddress: contract.address,
+  //       args: args,
+  //     });
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
 }
 
 main()

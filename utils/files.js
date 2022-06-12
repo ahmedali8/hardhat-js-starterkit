@@ -15,10 +15,6 @@ const ensureDirectoryExists = async (directory) => {
   }
 };
 
-const ensureDirectory = async (directory) => {
-  ensureDirectoryExists(directory);
-};
-
 const writeFile = async (filePath, data) => {
   await ensureDirectoryExists(path.dirname(filePath));
   await writeFileAsync(filePath, data);
@@ -37,9 +33,26 @@ const parseFile = async (filePath) => {
   return null;
 };
 
+const deleteFolderRecursive = (directoryPath) => {
+  if (fs.existsSync(directoryPath)) {
+    fs.readdirSync(directoryPath).forEach((file) => {
+      const curPath = path.join(directoryPath, file);
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(directoryPath);
+  }
+};
+
 module.exports = {
-  ensureDirectory,
+  ensureDirectoryExists,
   writeFile,
   writeJSONFile,
   parseFile,
+  deleteFolderRecursive,
 };

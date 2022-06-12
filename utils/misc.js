@@ -1,6 +1,5 @@
 "use strict";
 
-const { ethers } = require("hardhat");
 const { getAddress } = require("@ethersproject/address");
 const { toGwei, fromWei } = require("./format");
 
@@ -10,15 +9,15 @@ async function delayLog(ms) {
   await delay(ms);
 }
 
-/**
- * Get ether balance of address provided.
- * @param {*} address valid eth address.
- * @returns null or Balance in BN.
- */
-async function etherBalance(address) {
-  if (!isAddress(address)) return;
-  return await ethers.provider.getBalance(address);
-}
+// /**
+//  * Get ether balance of address provided.
+//  * @param {*} address valid eth address.
+//  * @returns null or Balance in BN.
+//  */
+// async function etherBalance(address) {
+//   if (!isAddress(address)) return;
+//   return await ethers.provider.getBalance(address);
+// }
 
 /**
  * returns the checksummed address if the address is valid,
@@ -47,7 +46,7 @@ async function getExtraGasInfo(tx) {
 
   const extraGasInfo = `${toGwei(gasPrice)} gwei, ${fromWei(
     gasUsed
-  )} ETH, ${gas} gas, 
+  )} ETH, ${gas} gas,
   txHash ${tx.hash}`;
 
   return extraGasInfo;
@@ -56,7 +55,6 @@ async function getExtraGasInfo(tx) {
 module.exports = {
   delay,
   delayLog,
-  etherBalance,
   isAddress,
   getExtraGasInfo,
 };

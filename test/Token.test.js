@@ -1,15 +1,18 @@
 const { expect } = require("chai");
-const { toWei } = require("../utils/index.js");
-const { deployContract } = require("../utils/contracts");
+const { toWei } = require("../utils/format");
 const { ZERO_ADDRESS } = require("../utils/constants");
+const { ethers } = require("hardhat");
 
-describe("TestingContract Unit tests", () => {
+describe("Token Unit tests", () => {
   let token;
+  let owner, user, accounts;
 
   beforeEach(async () => {
     [owner, user, ...accounts] = await ethers.getSigners();
     const args = ["TEST_TOKEN", "TST", toWei("1000000"), owner.address];
-    token = await deployContract(owner, "TestingContract", args);
+    const Token = await ethers.getContractFactory("Token");
+    token = await Token.deploy(...args);
+    token.deployed();
   });
 
   describe("#constructor", async () => {

@@ -1,10 +1,7 @@
 "use strict";
 
-const { ethers } = require("hardhat");
-const { utils } = ethers;
 const { formatUnits, parseUnits } = require("@ethersproject/units");
 const { BigNumber } = require("@ethersproject/bignumber");
-const R = require("ramda");
 
 /**
  * Return the `labelValue` converted to string as Billions, Millions, Thousands etc.
@@ -58,10 +55,9 @@ function omitEndZeros(value) {
  * Return the `value` converted to BigNumber.
  *
  * @param value string value.
- * @return BigNumber value or undefined.
+ * @return BigNumber value.
  */
 function toBN(value) {
-  if (!value) return undefined;
   return BigNumber.from(value);
 }
 
@@ -98,10 +94,9 @@ function toGwei(gasPrice) {
  *
  * @param value the string value to be converted.
  * @param decimals decimal value or BigNumberish.
- * @return BigNumber value or undefined.
+ * @return BigNumber value.
  */
 function toWei(value = "", decimals = 18) {
-  if (!value) return undefined;
   return parseUnits(value, decimals);
 }
 
@@ -112,10 +107,9 @@ function toWei(value = "", decimals = 18) {
  *
  * @param value BigNumberish value to be converted, preferred is BigNumber.
  * @param decimals decimal value or BigNumberish.
- * @return string value or undefined.
+ * @return string value.
  */
 function fromWei(value, decimals = 18) {
-  if (!value) return undefined;
   return formatUnits(value, decimals);
 }
 
@@ -162,30 +156,6 @@ function calculatePercentage(bn, percent) {
   return bn.mul(percent).div("100");
 }
 
-/**
- * abi encodes contract arguments
- * useful when you want to manually verify the contracts
- * for example, on Etherscan
- * @param {*} contract contract obj
- * @param {*} contractArgs contract arguments
- * @returns https://docs.ethers.io/v5/api/utils/abi/coder/#AbiCoder
- */
-const abiEncodeArgs = (contract, contractArgs) => {
-  // not writing abi encoded args if this does not pass
-  if (
-    !contractArgs ||
-    !contract ||
-    !R.hasPath(["interface", "deploy"], contract)
-  ) {
-    return "";
-  }
-  const encoded = utils.defaultAbiCoder.encode(
-    contract.interface.deploy.inputs,
-    contractArgs
-  );
-  return encoded;
-};
-
 module.exports = {
   convertToInternationalCurrencySystem,
   omitEndZeros,
@@ -197,5 +167,4 @@ module.exports = {
   fromWeiToNum,
   fromWeiToFixedNum,
   calculatePercentage,
-  abiEncodeArgs,
 };

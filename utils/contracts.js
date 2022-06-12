@@ -2,9 +2,8 @@
 
 const chalk = require("chalk");
 const { ethers } = require("hardhat");
-const { fromWei, abiEncodeArgs } = require("./format");
-const { etherBalance, getExtraGasInfo } = require("./misc");
-const { writeFile } = require("./files");
+const { fromWei } = require("./format");
+const { getExtraGasInfo } = require("./misc");
 const { getContractAt, getContractFactory } = ethers;
 
 async function getContractIns(contract, address) {
@@ -26,7 +25,7 @@ async function deployContract({
   );
   console.log(
     ` 🎭 Deployer: ${chalk.cyan(signer.address)}, Balance: ${chalk.grey(
-      fromWei(await etherBalance(signer.address))
+      fromWei(await ethers.provider.getBalance(signer.address))
     )} ETH`
   );
 
@@ -50,16 +49,6 @@ async function deployContract({
     chalk.magenta(contract.address)
   );
   console.log(" ⛽", chalk.grey(extraGasInfo));
-
-  const encoded = abiEncodeArgs(contract, args);
-  if (!encoded || encoded.length <= 2) return contract;
-  await writeFile(`artifacts/${contractName}.address`, contract.address);
-  await writeFile(`artifacts/${contractName}.args`, encoded.slice(2));
-
-  // await tenderly.persistArtifacts({
-  //   name: contractName,
-  //   address: contract.address,
-  // });
 
   return contract;
 }
