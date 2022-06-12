@@ -73,7 +73,7 @@ Starts a local hardhat chain with the state of the last `mainnet` block
 $ yarn fork
 ```
 
-For some helpful fork utils checkout [fork.js](https://github.com/ahmedali8/hardhat-js-starterkit/blob/main/utils/fork.js)
+For some helpful fork utils checkout [fork.js](https://github.com/ahmedali8/hardhat-js-starterkit/tree/main/utils/fork.js)
 
 ### Coverage
 
@@ -130,10 +130,10 @@ $ yarn deploy:network rinkeby
 Generate natspec documentation for your contracts by runing
 
 ```
-$ yarn docgen
+$ yarn dodoc
 ```
 
-For more information on Natspec [click here](https://docs.soliditylang.org/en/v0.8.12/natspec-format.html#natspec) and for hardhat docgen [click here](https://github.com/ItsNickBarry/hardhat-docgen)
+For more information on Natspec [click here](https://docs.soliditylang.org/en/v0.8.12/natspec-format.html#natspec) and for dodoc repo [click here](https://github.com/primitivefinance/primitive-dodoc)
 
 ### View Contracts Size
 
@@ -163,7 +163,7 @@ $ npx hardhat verify --contract contracts/CONTRACT_NAME.sol:CONTRACT_NAME --netw
 
 ### Verify Contract Programmatically
 
-Verify the contract using `verifyContract` function in [verify.js](https://github.com/ahmedali8/hardhat-starterkit/blob/main/utils/verify.js)
+Verify the contract using `verifyContract` function in [verify.js](https://github.com/ahmedali8/hardhat-js-starterkit/tree/main/utils/verify.js)
 
 Set etherscan/bscscan/polygonscan api key in `.env` file or using command, refer to `.env.example` for more insight.
 
@@ -171,9 +171,9 @@ Set etherscan/bscscan/polygonscan api key in `.env` file or using command, refer
 $ ETHERSCAN_API_KEY="your_api_key"
 ```
 
-If you don't already have an api key, use either of one [etherscan](https://etherscan.io/), [bscscan](https://bscscan.com/), [polygonscan](https://polygonscan.com/) according to the network you want. 
+If you don't already have an api key, use either of one [etherscan](https://etherscan.io/), [bscscan](https://bscscan.com/), [polygonscan](https://polygonscan.com/) according to the network you want.
 
-Example deploy script with `verifyContract` function is [here](https://github.com/ahmedali8/hardhat-starterkit/blob/main/scripts/deploy.js)
+Example deploy script with `verifyContract` function is [here](https://github.com/ahmedali8/hardhat-js-starterkit/tree/main/scripts/deploy.js)
 
 ## Additional Tasks
 
