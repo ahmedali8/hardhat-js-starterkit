@@ -24,11 +24,19 @@ async function verifyContract({
 }) {
   await delayLog(delay);
 
-  await run("verify:verify", {
-    address: contractAddress,
-    constructorArguments: args,
-    contract: contractPath,
-  });
+  try {
+    await run("verify:verify", {
+      address: contractAddress,
+      constructorArguments: args,
+      contract: contractPath,
+    });
+  } catch (error) {
+    if (error.message.toLowerCase().includes("already verified")) {
+      console.log("Already verified!");
+    } else {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = {
