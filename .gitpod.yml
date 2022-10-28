@@ -1,0 +1,10 @@
+image: "gitpod/workspace-node:latest"
+
+tasks:
+  - init: "yarn install"
+
+vscode:
+  extensions:
+    - "esbenp.prettier-vscode"
+    - "juanblanco.solidity"
+    - "ritwickdey.LiveServer"

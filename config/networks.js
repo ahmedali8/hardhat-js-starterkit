@@ -3,9 +3,9 @@ const { config: dotenvConfig } = require("dotenv");
 
 dotenvConfig({ path: resolve(__dirname, "../.env") });
 
-const INFURA_KEY = process.env.INFURA_PROJECT_ID;
+const INFURA_KEY = process.env.INFURA_API_KEY;
 if (typeof INFURA_KEY === "undefined") {
-  throw new Error(`INFURA_PROJECT_ID must be a defined environment variable`);
+  throw new Error(`INFURA_API_KEY must be a defined environment variable`);
 }
 
 const infuraUrl = (network) => `https://${network}.infura.io/v3/${INFURA_KEY}`;
@@ -26,25 +26,13 @@ const networks = {
     chainId: 1,
     url: infuraUrl("mainnet"),
   },
-  kovan: {
-    chainId: 42,
-    url: infuraUrl("kovan"),
-  },
   goerli: {
     chainId: 5,
     url: infuraUrl("goerli"),
   },
-  rinkeby: {
-    chainId: 4,
-    url: infuraUrl("rinkeby"),
-  },
-  ropsten: {
-    chainId: 3,
-    url: infuraUrl("ropsten"),
-  },
   sepolia: {
-    chainId: 11155111,
-    url: "",
+    chainId: 11_155_111,
+    url: infuraUrl("sepolia"),
   },
 
   // BINANCE SMART CHAIN
@@ -72,39 +60,19 @@ const networks = {
     chainId: 10,
     url: infuraUrl("optimism-mainnet"),
   },
-  "optimism-kovan": {
-    chainId: 69,
-    url: infuraUrl("optimism-kovan"),
+  "optimism-goerli": {
+    chainId: 420,
+    url: infuraUrl("optimism-goerli"),
   },
 
   // ARBITRUM
   "arbitrum-mainnet": {
-    chainId: 42161,
+    chainId: 42_161,
     url: infuraUrl("arbitrum-mainnet"),
   },
-  "arbitrum-rinkeby": {
-    chainId: 421611,
-    url: infuraUrl("arbitrum-rinkeby"),
-  },
-
-  // AVALANCHE
-  "avalanche-mainnet": {
-    chainId: 43114,
-    url: `https://api.avax.network/ext/bc/C/rpc`,
-  },
-  "fuji-avalance": {
-    chainId: 43113,
-    url: `https://api.avax-test.network/ext/bc/C/rpc`,
-  },
-
-  // FANTOM
-  "fantom-mainnet": {
-    chainId: 250,
-    url: `https://rpcapi.fantom.network`,
-  },
-  "fantom-testnet": {
-    chainId: 4002,
-    url: `https://rpc.testnet.fantom.network`,
+  "arbitrum-goerli": {
+    chainId: 421_611,
+    url: infuraUrl("arbitrum-goerli"),
   },
 };
 

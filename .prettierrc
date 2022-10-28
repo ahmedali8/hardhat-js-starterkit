@@ -5,11 +5,13 @@
   "singleQuote": false,
   "tabWidth": 2,
   "trailingComma": "es5",
+  "proseWrap": "always",
 
   "overrides": [
     {
       "files": "*.sol",
       "options": {
+        "compiler": "0.8.17",
         "tabWidth": 4,
         "useTabs": false,
         "bracketSpacing": false,

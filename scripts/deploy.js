@@ -1,63 +1,53 @@
 "use strict";
 
 const { ethers } = require("hardhat");
+const { preDeployConsole, postDeployConsole } = require("../utils/contracts");
 const { toWei } = require("../utils/format");
-const { deployContract } = require("../utils/contracts");
 const { verifyContract } = require("../utils/verify");
-const { getExtraGasInfo } = require("../utils/misc");
 
 async function main() {
   const { chainId } = await ethers.provider.getNetwork();
   const [owner] = await ethers.getSigners();
 
-  const CONTRACT_NAME = "Token";
+  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
+  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
+  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
 
-  const args = [
-    "testing new created token",
-    "TCT",
-    toWei("6000000"),
-    owner.address,
-  ];
-  const contract = await deployContract({
-    signer: owner,
+  const lockedAmount = toWei("1");
+
+  const CONTRACT_NAME = "Lock";
+
+  await preDeployConsole({
+    signerAddress: owner.address,
     contractName: CONTRACT_NAME,
-    args: args,
+  });
+  const LockFactory = await ethers.getContractFactory(CONTRACT_NAME);
+  let lock = await LockFactory.connect(owner).deploy(unlockTime, {
+    value: lockedAmount,
+  });
+  lock = await postDeployConsole({
+    contractName: CONTRACT_NAME,
+    contract: lock,
   });
 
-  /*
-  // If you want to send some ETH to a contract on deploy (make your constructor payable!)
-  const contract = await deployContract({
-    signer: owner,
-    contractName: CONTRACT_NAME,
-    args: args,
-    overrides: {
-      value: toWei("1"), // send 1 ether
-    },
-  });
-  */
-
-  /*
-  // Mint 100 tokens for user
-  const [_, user] = await ethers.getSigners();
-  const tx = await contract.connect(user).mint(user.address, toWei("100"));
-  const extraGasInfo = await getExtraGasInfo(tx);
-  console.log("Minting: ", extraGasInfo);
-  */
+  console.log(
+    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  );
 
   // You don't want to verify on localhost
   // uncomment below code to programmatically verify contract
-  // try {
-  //   if (chainId != 31337 && chainId != 1337) {
-  //     const contractPath = `contracts/${CONTRACT_NAME}.sol:${CONTRACT_NAME}`;
-  //     await verifyContract({
-  //       contractPath: contractPath,
-  //       contractAddress: contract.address,
-  //       args: args,
-  //     });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    if (chainId != 31337 && chainId != 1337) {
+      const contractPath = `contracts/${CONTRACT_NAME}.sol:${CONTRACT_NAME}`;
+      await verifyContract({
+        contractPath: contractPath,
+        contractAddress: lock.address,
+        args: [unlockTime],
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 main()

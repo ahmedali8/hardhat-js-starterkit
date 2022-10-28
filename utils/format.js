@@ -1,7 +1,8 @@
 "use strict";
 
-const { formatUnits, parseUnits } = require("@ethersproject/units");
+const { formatUnits } = require("@ethersproject/units");
 const { BigNumber } = require("@ethersproject/bignumber");
+const { fromBn, toBn } = require("evm-bn");
 
 /**
  * Return the `labelValue` converted to string as Billions, Millions, Thousands etc.
@@ -97,7 +98,7 @@ function toGwei(gasPrice) {
  * @return BigNumber value.
  */
 function toWei(value = "", decimals = 18) {
-  return parseUnits(value, decimals);
+  return toBn(value, decimals);
 }
 
 /**
@@ -110,7 +111,7 @@ function toWei(value = "", decimals = 18) {
  * @return string value.
  */
 function fromWei(value, decimals = 18) {
-  return formatUnits(value, decimals);
+  return fromBn(value, decimals);
 }
 
 /**
@@ -156,6 +157,14 @@ function calculatePercentage(bn, percent) {
   return bn.mul(percent).div("100");
 }
 
+const randomInteger = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const randomNumber = (min, max) => {
+  return Math.random() * (max - min) + min;
+};
+
 module.exports = {
   convertToInternationalCurrencySystem,
   omitEndZeros,
@@ -167,4 +176,6 @@ module.exports = {
   fromWeiToNum,
   fromWeiToFixedNum,
   calculatePercentage,
+  randomInteger,
+  randomNumber,
 };

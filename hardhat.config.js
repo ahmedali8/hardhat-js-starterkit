@@ -1,17 +1,12 @@
-require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-etherscan");
-require("solidity-coverage");
-require("hardhat-contract-sizer");
-require("hardhat-gas-reporter");
+require("@nomicfoundation/hardhat-toolbox");
 require("@primitivefi/hardhat-dodoc");
-require("hardhat-test-utils");
+const { config: dotenvConfig } = require("dotenv");
+require("hardhat-contract-sizer");
+const { resolve } = require("path");
 
-require("./tasks");
 const { API_KEYS } = require("./config/api-keys");
 const { networks } = require("./config/networks");
-
-const { resolve } = require("path");
-const { config: dotenvConfig } = require("dotenv");
+require("./tasks");
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
@@ -28,14 +23,8 @@ if (
 }
 
 const getAccounts = () => {
-  if (ACCOUNT_TYPE === "MNEMONIC")
-    return {
-      mnemonic,
-      count: 10,
-      path: "m/44'/60'/0'/0",
-    };
-  // can add as many private keys as you want
-  else
+  if (ACCOUNT_TYPE === "PRIVATE_KEYS") {
+    // can add as many private keys as you want
     return [
       `0x${process.env.PRIVATE_KEY_1}`,
       // `0x${process.env.PRIVATE_KEY_2}`,
@@ -43,6 +32,13 @@ const getAccounts = () => {
       // `0x${process.env.PRIVATE_KEY_4}`,
       // `0x${process.env.PRIVATE_KEY_5}`,
     ];
+  } else {
+    return {
+      mnemonic,
+      count: 10,
+      path: "m/44'/60'/0'/0",
+    };
+  }
 };
 
 function getChainConfig(network) {
@@ -65,7 +61,7 @@ module.exports = {
     debugMode: false,
     keepFileStructure: true,
     freshOutput: true,
-    outputDir: "./generated/docs",
+    outputDir: "./docs",
     include: ["contracts"],
   },
   etherscan: {
@@ -90,10 +86,7 @@ module.exports = {
 
     // ETHEREUM
     mainnet: getChainConfig("mainnet"),
-    kovan: getChainConfig("kovan"),
     goerli: getChainConfig("goerli"),
-    rinkeby: getChainConfig("rinkeby"),
-    ropsten: getChainConfig("ropsten"),
     sepolia: getChainConfig("sepolia"),
 
     // BINANCE SMART CHAIN
@@ -106,19 +99,11 @@ module.exports = {
 
     // OPTIMISM
     "optimism-mainnet": getChainConfig("optimism-mainnet"),
-    "optimism-kovan": getChainConfig("optimism-kovan"),
+    "optimism-goerli": getChainConfig("optimism-goerli"),
 
     // ARBITRUM
     "arbitrum-mainnet": getChainConfig("arbitrum-mainnet"),
-    "arbitrum-rinkeby": getChainConfig("arbitrum-rinkeby"),
-
-    // AVALANCHE
-    "avalanche-mainnet": getChainConfig("avalanche-mainnet"),
-    "fuji-avalance": getChainConfig("fuji-avalance"),
-
-    // FANTOM
-    "fantom-mainnet": getChainConfig("fantom-mainnet"),
-    "fantom-testnet": getChainConfig("fantom-testnet"),
+    "arbitrum-goerli": getChainConfig("arbitrum-goerli"),
   },
   paths: {
     artifacts: "./artifacts",
@@ -129,7 +114,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.15",
+        version: "0.8.17",
         settings: {
           metadata: {
             // Not including the metadata hash

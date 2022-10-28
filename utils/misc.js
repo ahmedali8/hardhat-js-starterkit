@@ -1,6 +1,8 @@
 "use strict";
 
 const { getAddress } = require("@ethersproject/address");
+const { keccak256 } = require("@ethersproject/solidity");
+const { computeAddress } = require("@ethersproject/transactions");
 const { toGwei, fromWei } = require("./format");
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -8,16 +10,6 @@ async function delayLog(ms) {
   console.log(`waiting for ${ms / 1000}s...`);
   await delay(ms);
 }
-
-// /**
-//  * Get ether balance of address provided.
-//  * @param {*} address valid eth address.
-//  * @returns null or Balance in BN.
-//  */
-// async function etherBalance(address) {
-//   if (!isAddress(address)) return;
-//   return await ethers.provider.getBalance(address);
-// }
 
 /**
  * returns the checksummed address if the address is valid,
@@ -29,6 +21,12 @@ function isAddress(value) {
   } catch {
     return false;
   }
+}
+
+function createRandomChecksumAddress(salt) {
+  const signerAddress = computeAddress(keccak256(["string"], [salt]));
+  const checkSummedSignerAddress = getAddress(signerAddress);
+  return checkSummedSignerAddress;
 }
 
 /**
@@ -56,5 +54,6 @@ module.exports = {
   delay,
   delayLog,
   isAddress,
+  createRandomChecksumAddress,
   getExtraGasInfo,
 };
