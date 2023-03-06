@@ -1,7 +1,13 @@
 {
+  "editor.rulers": [80],
   "editor.formatOnSave": true,
-  "[javascript]": {
+  "solidity.linter": "solhint",
+  "solidity.defaultCompiler": "remote",
+  "solidity.compileUsingRemoteVersion": "v0.8.19",
+  "solidity.enabledAsYouTypeCompilationErrorCheck": true,
+  "solidity.validationDelay": 1500,
+  "solidity.formatter": "prettier",
+  "[solidity]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "solidity.compileUsingRemoteVersion": "v0.8.19"
+  }
 }

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "dotenv.dotenv-vscode",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "juanblanco.solidity"
+  ]
+}
