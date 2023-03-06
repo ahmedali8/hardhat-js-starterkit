@@ -20,7 +20,7 @@
     "lint:sol": "solhint --config ./.solhint.json --max-warnings 0 \"contracts/**/*.sol\"",
     "lint:js": "eslint --config ./.eslintrc.js --ignore-path ./.eslintignore --ext .js .",
     "postinstall": "husky install && DOTENV_CONFIG_PATH=./.env.example yarn hardhat compile",
-    "prettier": "prettier --config .prettierrc --write \"**/*.{js,json,md,yml,sol}\"",
+    "prettier:write": "prettier --config .prettierrc --write \"**/*.{js,json,md,yml,sol}\"",
     "prettier:check": "prettier --config .prettierrc \"**/*.{js,json,md,yml,sol}\"",
     "size": "hardhat size-contracts",
     "test": "hardhat test",
