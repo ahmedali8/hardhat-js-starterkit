@@ -1,7 +1,8 @@
 const { resolve } = require("path");
 const { config: dotenvConfig } = require("dotenv");
 
-dotenvConfig({ path: resolve(__dirname, "../.env") });
+const dotenvConfigPath = process.env.DOTENV_CONFIG_PATH || "./.env";
+dotenvConfig({ path: resolve(process.cwd(), dotenvConfigPath) });
 
 const INFURA_KEY = process.env.INFURA_API_KEY;
 if (typeof INFURA_KEY === "undefined") {

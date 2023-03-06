@@ -1,15 +1,19 @@
 name: "CI"
 
+env:
+  DOTENV_CONFIG_PATH: "./.env.example"
+
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - "main"
   push:
     branches:
       - "main"
 
 jobs:
-  ci:
+  ### Run Linters ###
+  lint:
+    name: "Run Linters"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
@@ -21,16 +25,10 @@ jobs:
           cache: "yarn"
           node-version: "lts/*"
 
-      # # Inject all environment variables from ".env.example" in $GITHUB_ENV
-      - name: Load .env file
-        uses: xom9ikk/dotenv@v2
-        with:
-          mode: example
-
-      - name: "Install the dependencies"
+      - name: "Install the Node.js dependencies"
         run: "yarn install --immutable --inline-builds"
 
-      - name: "Lint solidity code"
+      - name: "Lint the contracts"
         run: "yarn lint:sol"
 
       - name: "Add lint summary"
@@ -38,13 +36,76 @@ jobs:
           echo "## Lint results" >> $GITHUB_STEP_SUMMARY
           echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
 
-      - name: "Test the contracts"
+  ### Build Contracts ###
+  build:
+    name: "Build Contracts"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v3"
+
+      - name: "Install Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "yarn"
+          node-version: "lts/*"
+
+      - name: "Install the Node.js dependencies"
+        run: "yarn install --immutable --inline-builds"
+
+      - name: "Compile the contracts"
+        run: |
+          yarn clean
+          yarn compile
+
+      - name: "Add build summary"
+        run: |
+          echo "## Build result" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+
+  ### Run Tests ###
+  test:
+    name: "Run Tests"
+    needs: ["lint", "build"]
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v3"
+
+      - name: "Install Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "yarn"
+          node-version: "lts/*"
+
+      - name: "Install the Node.js dependencies"
+        run: "yarn install --immutable --inline-builds"
+
+      - name: "Run tests"
         run: "yarn test:gas"
 
       - name: "Add test summary"
         run: |
-          echo "## Test results" >> $GITHUB_STEP_SUMMARY
+          echo "## Tests result" >> $GITHUB_STEP_SUMMARY
           echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+
+  ### Run Coverage ###
+  coverage:
+    name: "Run Coverage"
+    needs: ["lint", "build", "test"]
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v3"
+
+      - name: "Install Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "yarn"
+          node-version: "lts/*"
+
+      - name: "Install the Node.js dependencies"
+        run: "yarn install --immutable --inline-builds"
 
       - name: "Generate the coverage report"
         run: "yarn coverage"

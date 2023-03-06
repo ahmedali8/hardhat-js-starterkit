@@ -8,7 +8,8 @@ const { API_KEYS } = require("./config/api-keys");
 const { networks } = require("./config/networks");
 require("./tasks");
 
-dotenvConfig({ path: resolve(__dirname, "./.env") });
+const dotenvConfigPath = process.env.DOTENV_CONFIG_PATH || "./.env";
+dotenvConfig({ path: resolve(process.cwd(), dotenvConfigPath) });
 
 const ACCOUNT_TYPE = process.env.ACCOUNT_TYPE;
 const mnemonic = process.env.MNEMONIC;
