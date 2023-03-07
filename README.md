@@ -47,7 +47,6 @@ in reading the
 This template comes with sensible default configurations in the following files:
 
 ```text
-├── .commitlintrc.json
 ├── .editorconfig
 ├── .eslintignore
 ├── .eslintrc.js
@@ -71,20 +70,6 @@ action's `$GITHUB_ENV`.
 
 You can edit the CI script in
 [.github/workflows/ci.yml](./.github/workflows/ci.yml).
-
-### Conventional Commits
-
-This template enforces the
-[Conventional Commits](https://www.conventionalcommits.org/) standard for git
-commit messages. This is a lightweight convention that creates an explicit
-commit history, which makes it easier to write automated tools on top of.
-
-### Git Hooks
-
-This template uses [Husky](https://github.com/typicode/husky) to run automated
-checks on commit messages, and
-[Lint Staged](https://github.com/okonet/lint-staged) to automatically format the
-code with Prettier when making a git commit.
 
 ## Usage
 

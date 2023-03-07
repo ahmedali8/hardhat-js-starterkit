@@ -9,7 +9,6 @@
   "scripts": {
     "chain": "hardhat node --network hardhat",
     "clean": "shx rm -rf ./artifacts ./cache ./coverage ./coverage.json",
-    "commit": "git-cz",
     "compile": "hardhat clean && hardhat compile",
     "coverage": "hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"./test/**/*.js\"",
     "deploy": "hardhat run scripts/deploy.js --network hardhat",
@@ -19,7 +18,7 @@
     "lint": "yarn run lint:sol && yarn run lint:js && yarn run prettier:check",
     "lint:sol": "solhint --config ./.solhint.json --max-warnings 0 \"contracts/**/*.sol\"",
     "lint:js": "eslint --config ./.eslintrc.js --ignore-path ./.eslintignore --ext .js .",
-    "postinstall": "husky install && DOTENV_CONFIG_PATH=./.env.example yarn hardhat compile",
+    "postinstall": "DOTENV_CONFIG_PATH=./.env.example yarn hardhat compile",
     "prettier:write": "prettier --config .prettierrc --write \"**/*.{js,json,md,yml,sol}\"",
     "prettier:check": "prettier --config .prettierrc \"**/*.{js,json,md,yml,sol}\"",
     "size": "hardhat size-contracts",
@@ -30,8 +29,6 @@
     "verify": "hardhat run scripts/verify.js --network"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.4.4",
-    "@commitlint/config-conventional": "^17.4.4",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/abstract-signer": "^5.7.0",
     "@ethersproject/address": "^5.7.0",
@@ -60,8 +57,6 @@
     "chai": "4.3.7",
     "chalk": "^4.1.2",
     "child_process": "^1.0.2",
-    "commitizen": "^4.3.0",
-    "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
@@ -71,8 +66,6 @@
     "hardhat": "2.13.0",
     "hardhat-contract-sizer": "2.8.0",
     "hardhat-gas-reporter": "1.0.9",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.1.2",
     "lodash": "^4.17.21",
     "mocha": "^10.2.0",
     "prettier": "^2.8.4",
