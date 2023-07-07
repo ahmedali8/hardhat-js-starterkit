@@ -44,9 +44,10 @@ describe("Lock", function () {
         deployOneYearLockFixture
       );
 
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(
-        lockedAmount
-      );
+      const address = await lock.getAddress();
+      const balance = await ethers.provider.getBalance(address);
+
+      expect(balance).to.equal(lockedAmount);
     });
 
     it("Should fail if the unlockTime is not in the future", async function () {

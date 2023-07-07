@@ -30,8 +30,10 @@ async function main() {
     contract: lock,
   });
 
+  const lockAddress = await lock.getAddress();
+
   console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lockAddress}`
   );
 
   // You don't want to verify on localhost
@@ -41,7 +43,7 @@ async function main() {
       const contractPath = `contracts/${CONTRACT_NAME}.sol:${CONTRACT_NAME}`;
       await verifyContract({
         contractPath: contractPath,
-        contractAddress: lock.address,
+        contractAddress: lockAddress,
         args: [unlockTime],
       });
     }

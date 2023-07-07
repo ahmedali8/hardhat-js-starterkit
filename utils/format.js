@@ -1,181 +1,189 @@
 "use strict";
 
-const { formatUnits } = require("@ethersproject/units");
+const { formatUnits } = require("ethers");
 const { BigNumber } = require("@ethersproject/bignumber");
 const { fromBn, toBn } = require("evm-bn");
 
 /**
- * Return the `labelValue` converted to string as Billions, Millions, Thousands etc.
+ * Converts a number to a string representation in the International Currency System (e.g., Billions, Millions, Thousands).
  *
- * @param labelValue number.
- * @return string value or undefined.
+ * @param labelValue - The number to be converted.
+ * @returns The string value in the International Currency System, or undefined if the input is falsy.
  */
 function convertToInternationalCurrencySystem(labelValue) {
   if (!labelValue) {
     return undefined;
   }
-  // Nine Zeroes for Billions
-  if (Math.abs(Number(labelValue)) >= 1000000000) {
-    return (
-      (Math.abs(Number(labelValue)) / 1000000000)
-        .toFixed(2)
-        .replace(/\.?0+$/, "") + " B"
-    );
-  }
-  // Six Zeroes for Millions
-  else if (Math.abs(Number(labelValue)) >= 1000000) {
-    return (
-      (Math.abs(Number(labelValue)) / 1000000)
-        .toFixed(2)
-        .replace(/\.?0+$/, "") + " M"
-    );
-  }
-  // Three Zeroes for Thousands
-  else if (Math.abs(Number(labelValue)) >= 1000) {
-    return (
-      (Math.abs(Number(labelValue)) / 1000).toFixed(2).replace(/\.?0+$/, "") +
-      " K"
-    );
+
+  const absValue = Math.abs(labelValue);
+
+  if (absValue >= 1e9) {
+    // Billion
+    return (absValue / 1e9).toFixed(2).replace(/\.?0+$/, "") + " B";
+  } else if (absValue >= 1e6) {
+    // Million
+    return (absValue / 1e6).toFixed(2).replace(/\.?0+$/, "") + " M";
+  } else if (absValue >= 1e3) {
+    // Thousand
+    return (absValue / 1e3).toFixed(2).replace(/\.?0+$/, "") + " K";
   } else {
-    return Math.abs(Number(labelValue)).toString();
+    return absValue.toString();
   }
 }
 
 /**
- * Return the `value` converted to string and removing the end unnecessary zeros.
+ * Returns the string representation of a number, removing unnecessary trailing zeros.
  *
- * @param value number.
- * @return string value or undefined.
+ * @param value - The number to be converted.
+ * @returns The string value with trailing zeros removed.
  */
-function omitEndZeros(value) {
-  if (!value) return undefined;
+function removeTrailingZeros(value) {
   return value.toString().replace(/\.?0+$/, "");
 }
 
 /**
- * Return the `value` converted to BigNumber.
+ * Returns the string representation of a number with a specified precision.
  *
- * @param value string value.
- * @return BigNumber value.
+ * @param value - The number to be converted.
+ * @param precision - The number of decimal places to include in the string representation.
+ * @returns The string value with the specified precision.
  */
-function toBN(value) {
-  return BigNumber.from(value);
-}
-
-/**
- * Return the `value` converted to string.
- *
- * @param value number.
- * @param precision fractionDecimals.
- * @return string value or undefined.
- */
-function numToFix(value, precision = 4) {
-  if (!value) return undefined;
-
+function numWithPrecision(value, precision = 4) {
   return value.toFixed(precision);
 }
 
 /**
-/**
- * Return the `gasPrice` converted to gwei.
- * formatUnits(value: BigNumberish, unitName?: BigNumberish | undefined): string
- * BigNumberish -> string, BigNumber, number, BytesLike or BigInt.`https://docs.ethers.io/v5/api/utils/bignumber/#BigNumberish`
+ * Converts a gas price value to gwei.
  *
- * @param gasPrice BigNumberish value to be converted, preferred is BigNumber.
- * @return string value or undefined.
+ * formatUnits(value: BigNumberish, unit?: string | Numeric | undefined): string
+ * BigNumberish -> string | Numeric
+ * Numeric -> number | bigint
+ *
+ * @param gasPrice - The gas price value to be converted.
+ * @returns The string value of the gas price in gwei.
  */
 function toGwei(gasPrice) {
   return formatUnits(gasPrice, "gwei");
 }
 
 /**
- * Return the `value` converted to BigNumber wei.
- * parseUnits(value: string, unitName?: BigNumberish | undefined): BigNumber
- * BigNumberish -> string, BytesLike, BigNumber, number or BigInt.`https://docs.ethers.io/v5/api/utils/bignumber/#BigNumberish`
+ * Converts a value to wei.
  *
- * @param value the string value to be converted.
- * @param decimals decimal value or BigNumberish.
- * @return BigNumber value.
+ * parseUnits(value: string, unit?: string | Numeric): bigint
+ * BigNumberish -> string | Numeric
+ * Numeric -> number | bigint
+ *
+ * @param value - The value to be converted.
+ * @param decimals - The number of decimal places in the value.
+ * @returns The bigint value in wei.
  */
-function toWei(value = "", decimals = 18) {
-  return toBn(value, decimals);
+function toWei(value, decimals = 18) {
+  return toBn(value, decimals).toBigInt();
 }
 
 /**
- * Return the `value` converted to string from wei.
- * formatUnits(value: BigNumberish, unitName?: BigNumberish | undefined): string
- * BigNumberish -> string, BigNumber, number, BytesLike or BigInt.`https://docs.ethers.io/v5/api/utils/bignumber/#BigNumberish`
+ * Converts a value from wei to a string representation.
  *
- * @param value BigNumberish value to be converted, preferred is BigNumber.
- * @param decimals decimal value or BigNumberish.
- * @return string value.
+ * formatUnits(value: BigNumberish, unit?: string | Numeric | undefined): string
+ * BigNumberish -> string | Numeric
+ * Numeric -> number | bigint
+ *
+ * @param value - The value to be converted from wei.
+ * @param decimals - The number of decimal places in the value.
+ * @returns The string representation of the value.
  */
 function fromWei(value, decimals = 18) {
-  return fromBn(value, decimals);
+  return fromBn(BigNumber.from(value), decimals);
 }
 
 /**
- * Return the `value` converted to number from wei.
- * BigNumberish -> string, BigNumber, number, BytesLike or BigInt.`https://docs.ethers.io/v5/api/utils/bignumber/#BigNumberish`
+ * Converts a value from wei to a floating-point number.
  *
- * @param value BigNumberish value to be converted, preferred is BigNumber.
- * @param decimals decimal value or BigNumberish.
- * @return number value or undefined.
+ * BigNumberish -> string | Numeric
+ * Numeric -> number | bigint
+ *
+ * @param value - The value to be converted from wei.
+ * @param decimals - The number of decimal places in the value.
+ * @returns The floating-point number representation of the value.
  */
 function fromWeiToNum(value, decimals = 18) {
-  if (!value) return undefined;
-
-  const fromWeiString = fromWei(value, decimals) ?? "";
+  const fromWeiString = fromWei(value, decimals);
   return parseFloat(fromWeiString);
 }
 
 /**
- * Return the `value` converted to fixed point number.
- * BigNumberish -> string, BigNumber, number, BytesLike or BigInt.`https://docs.ethers.io/v5/api/utils/bignumber/#BigNumberish`
+ * Converts a value from wei to a fixed-point number with a specified precision.
  *
- * @param value BigNumberish value to be converted, preferred is BigNumber.
- * @param decimals decimal value or BigNumberish.
- * @param precision fractionDecimals.
- * @return number value or undefined.
+ * BigNumberish -> string | Numeric
+ * Numeric -> number | bigint
+ *
+ * @param value - The value to be converted from wei.
+ * @param decimals - The number of decimal places in the value.
+ * @param precision - The number of decimal places to include in the fixed-point number.
+ * @returns The fixed-point number representation of the value.
  */
-function fromWeiToFixedNum(value, decimals = 18, precision = 4) {
-  if (!value) return undefined;
-
-  const fromWeiNum = fromWeiToNum(value, decimals) ?? 0;
-  const fromWeiNumToFixed = numToFix(fromWeiNum, precision) ?? "";
+function fromWeiTodNumWithPrecision(value, decimals = 18, precision = 4) {
+  const fromWeiNum = fromWeiToNum(value, decimals);
+  const fromWeiNumToFixed = numWithPrecision(fromWeiNum, precision);
 
   return parseFloat(fromWeiNumToFixed);
 }
 
 /**
- * Calculates percentage according to `bn` and `percent`.
- * @param {*} bn bignumber
- * @param {*} percent percentage value
- * @returns
+ * Calculates the percentage of a BigNumber value.
+ *
+ * @param bn - The BigNumber value.
+ * @param percent - The percentage value.
+ * @returns The calculated percentage as a BigNumber.
  */
-function calculatePercentage(bn, percent) {
-  return bn.mul(percent).div("100");
+function calculatePercentageInBn(bn, percent) {
+  return bn.mul(percent).div(100);
 }
 
+/**
+ * Calculates the percentage of a bigint value.
+ *
+ * @param bn - The bigint value.
+ * @param percent - The percentage value.
+ * @returns The calculated percentage as a bigint.
+ */
+function calculatePercentageInBi(bn, percent) {
+  return (bn * BigInt(percent)) / 100n;
+}
+
+/**
+ * Generates a random integer between a minimum and maximum value (inclusive).
+ *
+ * @param min - The minimum value.
+ * @param max - The maximum value.
+ * @returns The random integer.
+ */
 const randomInteger = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+/**
+ * Generates a random number between a minimum and maximum value.
+ *
+ * @param min - The minimum value.
+ * @param max - The maximum value.
+ * @returns The random number.
+ */
 const randomNumber = (min, max) => {
   return Math.random() * (max - min) + min;
 };
 
 module.exports = {
   convertToInternationalCurrencySystem,
-  omitEndZeros,
-  toBN,
-  numToFix,
+  removeTrailingZeros,
+  numWithPrecision,
   toGwei,
   toWei,
   fromWei,
   fromWeiToNum,
-  fromWeiToFixedNum,
-  calculatePercentage,
+  fromWeiTodNumWithPrecision,
+  calculatePercentageInBn,
+  calculatePercentageInBi,
   randomInteger,
   randomNumber,
 };

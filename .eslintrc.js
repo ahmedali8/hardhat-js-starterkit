@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    es6: true,
+    es2020: true,
     jest: true,
   },
   extends: ["eslint:recommended", "prettier"],

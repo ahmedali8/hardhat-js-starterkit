@@ -3,6 +3,13 @@
 const { run } = require("hardhat");
 const { delayLog } = require("./misc");
 
+/**
+ * Waits for the specified number of confirmations for a given transaction.
+ *
+ * @param tx - The transaction response to wait for confirmations.
+ * @param waitConfirmations - The number of confirmations to wait for. Default is 5.
+ * @returns A promise that resolves when the specified number of confirmations have been received.
+ */
 async function waitForConfirmations(tx, waitConfirmations = 5) {
   if (!tx) return;
   console.log(`waiting for ${waitConfirmations} confirmations ...`);
@@ -10,7 +17,8 @@ async function waitForConfirmations(tx, waitConfirmations = 5) {
 }
 
 /**
- * Programmatically verify a contract
+ * Programmatically verify the given contract using the specified parameters.
+ *
  * @param {*} contractPath contract name in string e.g. `contracts/${contractName}.sol:${contractName}`
  * @param {*} contractAddress contract address in string
  * @param {*} args constructor args in array

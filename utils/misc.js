@@ -1,19 +1,37 @@
-"use strict";
+const {
+  computeAddress,
+  getAddress,
+  solidityPackedKeccak256,
+} = require("ethers");
 
-const { getAddress } = require("@ethersproject/address");
-const { keccak256 } = require("@ethersproject/solidity");
-const { computeAddress } = require("@ethersproject/transactions");
-const { toGwei, fromWei } = require("./format");
+const { fromWei, toGwei } = require("./format");
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-async function delayLog(ms) {
-  console.log(`waiting for ${ms / 1000}s...`);
-  await delay(ms);
+/**
+ * Asynchronously sleeps for the specified number of milliseconds.
+ *
+ * @param ms - The number of milliseconds to sleep.
+ * @returns A promise that resolves after the specified time.
+ */
+async function sleep(ms) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
- * returns the checksummed address if the address is valid,
- * otherwise returns false
+ * Asynchronously logs a message and waits for the specified number of milliseconds.
+ *
+ * @param ms - The number of milliseconds to wait.
+ */
+async function delayLog(ms) {
+  console.log(`Waiting for ${ms / 1000}s...`);
+  await sleep(ms);
+}
+
+/**
+ * Checks if the provided address is valid and returns the checksummed address if valid.
+ * Otherwise, returns false.
+ *
+ * @param value - The address to be checked.
+ * @returns The checksummed address if valid, or false.
  */
 function isAddress(value) {
   try {
@@ -23,35 +41,49 @@ function isAddress(value) {
   }
 }
 
+/**
+ * Creates a random checksummed address using the provided salt.
+ *
+ * @param salt - The salt to generate the address.
+ * @returns The checksummed address.
+ */
 function createRandomChecksumAddress(salt) {
-  const signerAddress = computeAddress(keccak256(["string"], [salt]));
+  const signerAddress = computeAddress(
+    solidityPackedKeccak256(["string"], [salt])
+  );
   const checkSummedSignerAddress = getAddress(signerAddress);
   return checkSummedSignerAddress;
 }
 
 /**
- * Get necessary Gas information of a transaction.
- * @param {*} tx transaction response if contract deployed
- * or other transaction executed
- * @returns null or information string
+ * Retrieves necessary gas information of a transaction.
+ *
+ * @param tx - The transaction response (e.g., contract deployment or executed transaction).
+ * @returns A string containing gas information or null if the transaction is falsy or unsuccessful.
  */
 async function getExtraGasInfo(tx) {
-  if (!tx) return;
-  const gasPrice = tx.gasPrice;
-  const gasUsed = tx.gasLimit.mul(gasPrice);
-  const txReceipt = await tx.wait();
-  const gas = txReceipt.gasUsed;
+  if (!tx) {
+    return null;
+  }
 
+  const gasPrice = tx.gasPrice;
+  const gasUsed = tx.gasLimit * gasPrice;
+  const txReceipt = await tx.wait();
+
+  if (!txReceipt) {
+    return null;
+  }
+
+  const gas = txReceipt.gasUsed;
   const extraGasInfo = `${toGwei(gasPrice)} gwei, ${fromWei(
     gasUsed
-  )} ETH, ${gas} gas,
-  txHash ${tx.hash}`;
+  )} ETH, ${gas} gas, txHash: ${tx.hash}`;
 
   return extraGasInfo;
 }
 
 module.exports = {
-  delay,
+  sleep,
   delayLog,
   isAddress,
   createRandomChecksumAddress,

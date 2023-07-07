@@ -18,7 +18,8 @@ defaults.
   contracts
 - [Ethers](https://github.com/ethers-io/ethers.js/): renowned Ethereum library
   and wallet implementation
-- [Solhint](https://github.com/protofire/solhint): code linter
+- [Solhint Community](https://github.com/solhint-community/solhint-community):
+  code linter
 - [Solcover](https://github.com/sc-forks/solidity-coverage): code coverage
 - [Prettier Plugin Solidity](https://github.com/prettier-solidity/prettier-plugin-solidity):
   code formatter
